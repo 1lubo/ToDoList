@@ -1,0 +1,14 @@
+body {
+    height: 100vh;
+    margin: 0;
+}
+
+.navbar {
+    position: fixed;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    background-color: #f1f1f1;
+    overflow: auto;
+}
