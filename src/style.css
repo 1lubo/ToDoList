@@ -18,6 +18,14 @@ body {
     min-height: 100vh;
 }
 
+.project-container {
+    margin: 0 0.2em 0.2em 0.2em ;
+    padding: 1em;
+    border-radius: 8px;
+    border: 5px solid black;
+    background-color: rgba(137, 43, 226, 0.341);
+}
+
 .priority-1 {
     background-color: green;
 }
