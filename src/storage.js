@@ -36,8 +36,7 @@ function checkStorageAvailable() {
 }
 
     function saveObject(object){        
-        window.localStorage.setItem(object.title, JSON.stringify(object));
-        console.log(`${object.type} with the name ${object.title} was successfully saved!`);
+        window.localStorage.setItem(object.title, JSON.stringify(object));        
     }
 
     function createObject(string) {
