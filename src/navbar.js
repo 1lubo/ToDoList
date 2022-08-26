@@ -15,7 +15,7 @@ function createNavBar(){
     
     navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link)));    
 
-    return navBarContainer;
+    document.body.appendChild(navBarContainer);
 }
 
 export {
