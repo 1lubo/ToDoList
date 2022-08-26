@@ -12,3 +12,20 @@ body {
     background-color: #f1f1f1;
     overflow: auto;
 }
+
+.content {
+    margin-left: 25%;
+    min-height: 100vh;
+}
+
+.priority-1 {
+    background-color: green;
+}
+
+.priority-2 {
+    background-color: orange;
+}
+
+.priority-3 {
+    background-color: red;
+}
