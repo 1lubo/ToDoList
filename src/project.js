@@ -5,8 +5,7 @@ function Project (title) {
     this.tasks = [];
 }
 
-Project.prototype.getTasks = function () {
-    var title = this.title;
+Project.prototype.getTasks = function () {    
     var project = this;
     Object.keys(localStorage).forEach(function(key){
         if(localStorage.getItem(key).includes(`"type":"task"`) && 
