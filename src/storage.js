@@ -66,8 +66,21 @@ function checkStorageAvailable() {
         }
         
     }
+
+    function allTasks () {
+        var allTasks = [];
+        Object.keys(localStorage).forEach(function(key){
+            if(localStorage.getItem(key).includes(`"type":"task"`)){
+                allTasks.push(createObject(localStorage.getItem(key)))
+            }
+        })
+
+        return allTasks
+    }
+
+    
   
 
 export {
-    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject
+    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks
 }
