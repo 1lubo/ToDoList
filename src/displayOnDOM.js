@@ -1,15 +1,29 @@
 import { addElement } from "./buildingblocks";
 import { createObject } from "./storage";
 
+function buildTaskHeader(title, priority){
+    var taskHeader = addElement('div');
+    taskHeader.classList.add('task-header');
+    var taskCompleted = addElement('input');
+    taskCompleted.setAttribute('type', 'checkbox');
+    taskCompleted.classList.add(`priority-${priority}`);
+    taskCompleted.classList.add('checkmark');
+    var taskTitle = addElement('h1', title);
+    taskTitle.classList.add('task-title');
+    taskHeader.appendChild(taskCompleted);
+    taskHeader.appendChild(taskTitle);
+
+    return taskHeader
+    
+}
+
 function buildTask(task) {
     var taskElements = [];    
     var task = createObject(task);
     var taskContainer = addElement('div');
     taskContainer.classList.add('task-container');
-    taskContainer.classList.add(`priority-${task.priority}`);
-    var taskTitle = addElement('h1', task.title);
-    taskTitle.classList.add('task-title');
-    taskElements.push(taskTitle);
+    taskContainer.classList.add(`priority-${task.priority}`);    
+    taskElements.push(buildTaskHeader(task.title, task.priority));
     var taskDueDate = addElement('div', task.dueDate);
     taskDueDate.classList.add('task-date');
     taskElements.push(taskDueDate);
@@ -37,7 +51,9 @@ function buildProject(project) {
 
 }
 
-//function buildContent
+function displayTaskDetail(task){
+
+}
 
 export {
     buildTask, buildProject
