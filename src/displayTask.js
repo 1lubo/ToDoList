@@ -34,8 +34,7 @@ function buildTaskFooter(dueDate){
 }
 
 function buildTask(task) {
-    var taskElements = [];    
-    //var task = createObject(task);    
+    var taskElements = [];        
     var taskContainer = addElement('div');
     taskContainer.classList.add('task-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
