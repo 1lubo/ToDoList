@@ -1,4 +1,4 @@
-const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, parseJSON} = require('date-fns');
+const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, isToday, isFuture} = require('date-fns');
 
 let today = new Date();
 
@@ -16,8 +16,8 @@ function oneDayDifference(date) {
 
 function displayDateFormat(date){
     
-    date = parseJSON(date);
-      
+    date = parseISO(date);
+    
     if(oneDayDifference(date)) {
         return oneDayDifference(date);
     } else if (isSameYear(today, date)) {
@@ -27,6 +27,22 @@ function displayDateFormat(date){
     }
 }
 
+function dateIsToday(date){
+    date = parseISO(date);    
+    if (isToday(date)) {
+        return true
+    }
+    return false;
+}
+
+function isInFuture(date){
+    date = parseISO(date)
+    if (isFuture(date)) {
+        return true
+    } 
+    return false
+}
 
 
-export { oneDayDifference, displayDateFormat}
+
+export { oneDayDifference, displayDateFormat, dateIsToday, isInFuture}
