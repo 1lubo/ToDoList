@@ -7,8 +7,11 @@ function addElement(a, b) {
     return element;
 }
 
-
+function removeContent() {
+    const element = document.getElementsByClassName('content')[0];
+    element.remove();
+}
 
 export {
-    addElement
+    addElement, removeContent
 }
