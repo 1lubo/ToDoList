@@ -1,6 +1,6 @@
 import { addElement } from "./buildingblocks";
-import { createObject } from "./storage";
-import { displayDateFormat } from "./dateHelper";
+import { createObject, allTasks } from "./storage";
+import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
 
 function buildTaskHeader(title, priority){
     var taskHeader = addElement('div');
@@ -20,7 +20,7 @@ function buildTaskHeader(title, priority){
 
 function buildTaskFooter(dueDate){
     var taskFooter = addElement('div');
-    taskFooter.classList.add('task-footer');
+    taskFooter.classList.add('task-footer');    
     var date = displayDateFormat(dueDate);
     var taskDueDate = addElement('div', date);
     var dateIcon = addElement('span');
@@ -35,37 +35,63 @@ function buildTaskFooter(dueDate){
 
 function buildTask(task) {
     var taskElements = [];    
-    var task = createObject(task);
+    //var task = createObject(task);    
     var taskContainer = addElement('div');
     taskContainer.classList.add('task-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
-    taskElements.push(buildTaskHeader(task.title, task.priority));    
+    taskElements.push(buildTaskHeader(task.title, task.priority));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
 
     return taskContainer;
 }
 
-function buildProject(project) {
-    
-    var project = createObject(project);
-    project.getTasks();    
-    var projectContainer = addElement('div');
-    projectContainer.classList.add('project-container');
-    var projectTitle = addElement('h1', project.title);
-    projectTitle.classList.add('project-title');
-    var tasksContainer = addElement('div');
+function showInbox() {
+    var content = document.createElement('div');
+    content.classList.add('content');
+    let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
-    project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
+    allTasks().forEach(function(task){
+        if(task.project == null) {
+            tasksContainer.appendChild(buildTask(task))
+        }
+    })
+    content.appendChild(tasksContainer);
 
-    projectContainer.appendChild(projectTitle);
-    projectContainer.appendChild(tasksContainer);
+    document.body.appendChild(content);
+}
 
-    return projectContainer;
+function showToday() {
+    var content = document.createElement('div');
+    content.classList.add('content');
+    let tasksContainer = addElement('div');
+    tasksContainer.classList.add('project-tasks');
+    allTasks().forEach(function(task){
+        if(dateIsToday(task.dueDate)) {
+            tasksContainer.appendChild(buildTask(task))
+        }
+    })
+    content.appendChild(tasksContainer);
 
+    document.body.appendChild(content);
+}
+
+function showUpcoming() {
+    var content = document.createElement('div');
+    content.classList.add('content');
+    let tasksContainer = addElement('div');
+    tasksContainer.classList.add('project-tasks');
+    allTasks().forEach(function(task){
+        if(isInFuture(task.dueDate)) {
+            tasksContainer.appendChild(buildTask(task))
+        }
+    })
+    content.appendChild(tasksContainer);
+
+    document.body.appendChild(content);
 }
 
 
 export {
-    buildTask, buildProject
+    buildTask, showInbox, showToday, showUpcoming
 }
