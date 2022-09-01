@@ -1,4 +1,18 @@
 import { addElement } from './buildingblocks';
+import { addProjectToNavbar } from './displayProject';
+import { allProjects } from './storage';
+
+
+function createNavBar(){    
+    let navBarContainer = addElement('div');
+    navBarContainer.classList.add('navbar');
+    let navbarLinks = [['Inbox', `\u{1F4E5}`], ['Today', `\u{2605}`], ['Upcoming', `\u{1F4C5}`]];
+    
+    navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
+    navBarContainer.appendChild(createProjectsSection());
+    document.body.appendChild(navBarContainer);
+    
+}
 
 function createNavLink(text, icon){
     let navLinkContainer = addElement('div');
@@ -17,22 +31,51 @@ function createProjectsSection(){
     let projectsHeader = addElement('div');
     projectsHeader.classList.add('projects-header');
     projectsHeader.appendChild(addElement('h4', 'Projects'));
-    projectsHeader.appendChild(addElement('span', `\u{2295}`));
+    let addProjectButton = addElement('span', `\u{2295}`);
+    addProjectButton.id = 'show-projects-form';
+    projectsHeader.appendChild(addProjectButton);    
     projectsContainer.appendChild(projectsHeader);
-    projectsContainer.appendChild(addElement('div')).classList.add('project-list');
-
+    projectsContainer.appendChild(newProjectForm());
+    let projectsList = addElement('div');
+    projectsList.classList.add('projects-list');
+    existingProjectsNavLinks().forEach( e=> projectsList.appendChild(e));
+    projectsContainer.appendChild(projectsList);
+    
     return projectsContainer;
 }
 
-function createNavBar(){    
-    let navBarContainer = addElement('div');
-    navBarContainer.classList.add('navbar');
-    let navbarLinks = [['Inbox', `\u{1F4E5}`], ['Today', `\u{2605}`], ['Upcoming', `\u{1F4C5}`]];
-    
-    navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
-    navBarContainer.appendChild(createProjectsSection());
-    document.body.appendChild(navBarContainer);
-    
+function existingProjectsNavLinks() {
+    let projectLinks = [];
+
+    if (allProjects().length > 0) {
+        allProjects().forEach( project => {
+            let projectLink = addElement('div', project.title);
+            projectLink.id = `${project.title}`
+            projectLink.classList.add('navbar-project');
+            projectLinks.push(projectLink);
+        })
+    }
+    return projectLinks;
+}
+
+
+
+function newProjectForm(){
+    let formContainer = addElement('div');
+    formContainer.classList.add('projects-form');
+    let newFormNameInput = addElement('input');
+    newFormNameInput.setAttribute('type', 'text');
+    newFormNameInput.setAttribute('placeholder', 'Project Name');
+    newFormNameInput.id = 'name';
+    let submitFormButton = addElement('button', 'Add Project');
+    let cancelFormButton = addElement('button', 'Cancel');
+    submitFormButton.id = 'add-project';
+    cancelFormButton.id = 'cancel-form';
+    formContainer.appendChild(newFormNameInput);
+    formContainer.appendChild(submitFormButton);
+    formContainer.appendChild(cancelFormButton);
+
+    return formContainer;
 }
 
 export {
