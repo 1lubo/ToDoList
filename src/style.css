@@ -1,3 +1,4 @@
+
 body {
     height: 100vh;
     margin: 0;
@@ -13,9 +14,23 @@ body {
     overflow: auto;
 }
 
+.navbarlink, .navbar-project {
+    cursor: pointer;
+}
+
+.navbarlink:hover, .navbar-project:hover {
+    background-color: aquamarine;
+}
+
 .content {
     margin-left: 25%;
     min-height: 100vh;
+}
+
+.projects-header, .navbarlink {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .project-container {
@@ -26,14 +41,74 @@ body {
     background-color: rgba(137, 43, 226, 0.341);
 }
 
+.projects-form {
+    display: none;
+}
+
+.show {
+    display: inline;
+}
+
+.hide {
+    display: none;
+}
+
+#show-projects-form{
+    cursor: pointer;
+    padding: 1em;
+}
+
 .priority-1 {
-    background-color: green;
+    border: 0.25em solid red;
 }
 
 .priority-2 {
-    background-color: orange;
+    border: 0.25em solid orange;
 }
 
 .priority-3 {
-    background-color: red;
+    border: 0.25em solid green;
 }
+
+.priority-4 {
+    border: 0.25em solid aqua;
+}
+
+.task-header {
+    display: flex;
+}
+
+.checkmark {
+    width: 1.9em;    
+    border-radius: 0.15em;        
+}
+
+.modal {    
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
