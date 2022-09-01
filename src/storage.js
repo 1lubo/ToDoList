@@ -40,9 +40,9 @@ function checkStorageAvailable() {
     }
 
     function createObject(string) {
-        var obj = JSON.parse(string);
-        var title = obj.title;
-        var type = obj.type;
+        let obj = JSON.parse(string);
+        let title = obj.title;
+        let type = obj.type;
 
         if(type == 'project') {            
             return new Project(title);
@@ -57,7 +57,7 @@ function checkStorageAvailable() {
             return false;
         }
 
-        var foundInStorage = window.localStorage.getItem(title);
+        let foundInStorage = window.localStorage.getItem(title);
 
         if (foundInStorage.includes(title) && foundInStorage.includes(type)) {
             return foundInStorage;
@@ -68,7 +68,7 @@ function checkStorageAvailable() {
     }
 
     function allTasks () {
-        var allTasks = [];
+        let allTasks = [];
         Object.keys(localStorage).forEach(function(key){
             if(localStorage.getItem(key).includes(`"type":"task"`)){
                 allTasks.push(createObject(localStorage.getItem(key)))
@@ -78,9 +78,25 @@ function checkStorageAvailable() {
         return allTasks
     }
 
+    function allProjects () {
+        let allProjects = [];
+        Object.keys(localStorage).forEach(function(key){
+            if(localStorage.getItem(key).includes(`"type":"project"`)){
+                allProjects.push(createObject(localStorage.getItem(key)))
+            }
+        })
+
+        return allProjects
+    }
+
+    function existingProjectNames () {
+        
+        return allProjects().map( project => project.title);
+    }
+
     
   
 
 export {
-    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks
+    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames
 }
