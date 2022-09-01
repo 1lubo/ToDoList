@@ -1,4 +1,4 @@
-import { Project,validateName, createProject, getNameFromForm, clearForm } from "./project";
+import { Project,validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject } from "./displayProject";
 import { removeContent } from "./buildingblocks";
 import { showInbox, showToday, showUpcoming } from "./displayTask";
@@ -25,6 +25,16 @@ function createNewProjectButton() {
             alert(validateName(getNameFromForm()))
     }
     })
+}
+
+function getNameFromForm() {
+    
+    return document.getElementById('name').value
+
+}
+
+function clearForm() {
+    document.getElementById('name').value = '';
 }
 
 function showNewProjectFormButton() {
