@@ -1,7 +1,8 @@
 import { Project,validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject } from "./displayProject";
 import { addElement, removeContent } from "./buildingblocks";
-import { showInbox, showToday, showUpcoming, addNewTaskToContainer } from "./displayTask";
+import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
+buildTaskAfterEdit } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 
 function newTaskForm(){
@@ -37,6 +38,13 @@ function newTaskForm(){
 
 }
 
+function taskLinks(){
+    Array.from(document.getElementsByClassName('task-container')).forEach( task => task.addEventListener('click', function(){        
+        showTask(task.id);
+        
+    }, {once: true}))
+}
+
 function getTaskTitleFromForm() {
     return document.getElementById('task-title').value
 }
@@ -46,7 +54,9 @@ function getTaskDescriptionFromForm() {
 }
 
 function getTaskDueDateFromForm() {
-    return document.getElementById('task-dueDate').value
+    let dueDate = document.getElementById('task-dueDate').value;
+    dueDate ||= new Date();
+    return dueDate
 }
 
 function clearTaskForm() {
@@ -89,6 +99,29 @@ function createNewTaskButton() {
             alert(validateTaskName(getTaskTitleFromForm(), 'Inbox'));
         }
     })
+}
+
+function closeExpandedTask(taskTitle) {
+    localStorage.removeItem(taskTitle);
+    let newTask = createTask(getTaskTitleFromForm(), 'Inbox', getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+    let taskContainer = document.getElementById(taskTitle)
+    
+    taskContainer.textContent = '';
+    buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
+    
+}
+
+/*function closeExpandedTaskWindow(taskTitle) {
+    window.onclick = function(event) {
+        console.log(event.target)
+        if (event.target != document.getElementById(taskTitle)) {
+            closeExpandedTask(taskTitle);
+        }
+      }
+}*/
+
+function closeExpandedTaskButton(taskTitle){
+    document.getElementById('close-expanded-task').addEventListener('click', function(){closeExpandedTask(taskTitle)})
 }
 
 function showNewProjectForm(){    
@@ -136,7 +169,9 @@ function cancelNewProjectFormButton() {
 function inbox() {
     document.getElementById('Inbox').addEventListener('click', function(){
         removeContent();
-        showInbox();
+        //showInbox();
+        showProject('Inbox')
+        taskLinks();
     })
 }
 
@@ -144,6 +179,7 @@ function today() {
     document.getElementById('Today').addEventListener('click', function(){
         removeContent();
         showToday();
+        taskLinks();
     })
 }
 
@@ -151,6 +187,7 @@ function upcoming() {
     document.getElementById('Upcoming').addEventListener('click', function(){
         removeContent();
         showUpcoming();
+        taskLinks();
     })
 }
 
@@ -181,5 +218,5 @@ function buttons() {
 
 
 export {
-    buttons
+    buttons, closeExpandedTaskButton, closeExpandedTask
 }
