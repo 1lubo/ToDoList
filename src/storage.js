@@ -94,9 +94,16 @@ function checkStorageAvailable() {
         return allProjects().map( project => project.title);
     }
 
+    function projectTaskNames (projectTitle) {        
+        let currentProject = allProjects().find(proj => proj.title = projectTitle);
+        currentProject.getTasks();        
+        
+        return currentProject.tasks.map( task => task.title );
+    }
+
     
   
 
 export {
-    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames
+    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames, projectTaskNames
 }
