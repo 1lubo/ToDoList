@@ -41,6 +41,7 @@ function buildTask(task) {
     taskElements.push(buildTaskHeader(task.title, task.priority));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
+    taskContainer.id = task.title;
 
     return taskContainer;
 }
@@ -51,7 +52,7 @@ function showInbox() {
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     allTasks().forEach(function(task){
-        if(task.project == null) {
+        if(task.project == 'Inbox') {
             tasksContainer.appendChild(buildTask(task))
         }
     })
@@ -90,7 +91,12 @@ function showUpcoming() {
     document.body.appendChild(content);
 }
 
+function addNewTaskToContainer(task) {
+    let root = document.getElementsByClassName('project-tasks')[0];
+    root.appendChild(buildTask(task));
+}
+
 
 export {
-    buildTask, showInbox, showToday, showUpcoming
+    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer
 }
