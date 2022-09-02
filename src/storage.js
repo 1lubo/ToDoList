@@ -70,11 +70,17 @@ function checkStorageAvailable() {
     function allTasks () {
         let allTasks = [];
         Object.keys(localStorage).forEach(function(key){
-            if(localStorage.getItem(key).includes(`"type":"task"`)){
-                allTasks.push(createObject(localStorage.getItem(key)))
+            let object = createObject(localStorage.getItem(key));
+
+            if (object.type == 'task') {                
+                allTasks.push(object);
             }
+          
         })
 
+        
+        allTasks.sort((a, b) => a.title.localeCompare(b.title));
+        
         return allTasks
     }
 
