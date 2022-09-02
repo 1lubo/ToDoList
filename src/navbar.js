@@ -2,6 +2,12 @@ import { addElement } from './buildingblocks';
 import { addProjectToNavbar } from './displayProject';
 import { allProjects } from './storage';
 
+function addTaskButton() {
+    let addTaskButton = addElement('a', `\u{2795}`);
+    addTaskButton.classList.add('float')
+    addTaskButton.id = 'new-task';
+    document.body.appendChild(addTaskButton);
+}
 
 function createNavBar(){    
     let navBarContainer = addElement('div');
@@ -11,7 +17,7 @@ function createNavBar(){
     navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
     navBarContainer.appendChild(createProjectsSection());
     document.body.appendChild(navBarContainer);
-    
+    addTaskButton();
 }
 
 function createNavLink(text, icon){
@@ -49,10 +55,12 @@ function existingProjectsNavLinks() {
 
     if (allProjects().length > 0) {
         allProjects().forEach( project => {
-            let projectLink = addElement('div', project.title);
-            projectLink.id = `${project.title}`
-            projectLink.classList.add('navbar-project');
-            projectLinks.push(projectLink);
+            if (project.title != 'Inbox'){
+                let projectLink = addElement('div', project.title);
+                projectLink.id = `${project.title}`
+                projectLink.classList.add('navbar-project');
+                projectLinks.push(projectLink);
+            }
         })
     }
     return projectLinks;
