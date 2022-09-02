@@ -1,15 +1,17 @@
 import { addElement } from "./buildingblocks";
 import { createObject, allTasks } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
+import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } from "./formsAndButtons";
+const {format} = require('date-fns');
 
 function buildTaskHeader(title, priority){
-    var taskHeader = addElement('div');
+    let taskHeader = addElement('div');
     taskHeader.classList.add('task-header');
-    var taskCompleted = addElement('input');
+    let taskCompleted = addElement('input');
     taskCompleted.setAttribute('type', 'checkbox');
     taskCompleted.classList.add(`priority-${priority}`);
     taskCompleted.classList.add('checkmark');
-    var taskTitle = addElement('h1', title);
+    let taskTitle = addElement('h1', title);
     taskTitle.classList.add('task-title');
     taskHeader.appendChild(taskCompleted);
     taskHeader.appendChild(taskTitle);
@@ -18,12 +20,33 @@ function buildTaskHeader(title, priority){
     
 }
 
+function buildExpandedTaskHeader(title, description){
+    let taskHeader = addElement('div');
+    taskHeader.classList.add('task-header');
+    let taskTitle = addElement('input');
+    taskTitle.setAttribute('type', 'text');
+    taskTitle.value = title;
+    taskTitle.id = 'task-title'
+    let taskDescription = addElement('input');
+    taskDescription.setAttribute('type', 'text');
+    taskDescription.value = description;
+    taskDescription.id = 'task-description'
+    let closeExpandedTask = addElement('span', `\u{2304}`);
+    closeExpandedTask.id = 'close-expanded-task';
+    taskHeader.appendChild(taskTitle);
+    taskHeader.appendChild(taskDescription);
+    taskHeader.appendChild(closeExpandedTask);
+
+    return taskHeader
+}
+
 function buildTaskFooter(dueDate){
-    var taskFooter = addElement('div');
-    taskFooter.classList.add('task-footer');    
-    var date = displayDateFormat(dueDate);
-    var taskDueDate = addElement('div', date);
-    var dateIcon = addElement('span');
+    let taskFooter = addElement('div');
+    taskFooter.classList.add('task-footer'); 
+    dueDate ||= new Date();
+    let date = displayDateFormat(dueDate);
+    let taskDueDate = addElement('div', date);
+    let dateIcon = addElement('span');
     dateIcon.innerText = `\u{1F4C5}`
     taskDueDate.appendChild(dateIcon);
     taskDueDate.classList.add('task-date');
@@ -33,9 +56,22 @@ function buildTaskFooter(dueDate){
 
 }
 
+function buildExpandedTaskFooter(dueDate) {
+    let taskFooter = addElement('div');
+    taskFooter.classList.add('task-footer'); 
+    let taskDueDate = addElement('input');
+    taskDueDate.setAttribute('type', 'date')
+    taskDueDate.value = dueDate;
+    taskDueDate.id = 'task-dueDate';
+
+    taskFooter.appendChild(taskDueDate);
+    
+    return taskFooter;
+}
+
 function buildTask(task) {
-    var taskElements = [];        
-    var taskContainer = addElement('div');
+    let taskElements = [];        
+    let taskContainer = addElement('div');
     taskContainer.classList.add('task-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
     taskElements.push(buildTaskHeader(task.title, task.priority));      
@@ -46,8 +82,23 @@ function buildTask(task) {
     return taskContainer;
 }
 
+function buildTaskAfterEdit(task) {
+    let taskElements = [];
+    taskElements.push(buildTaskHeader(task.title, task.priority));      
+    taskElements.push(buildTaskFooter(task.dueDate));
+    return taskElements;
+}
+
+function buildExpandedTask(task) {
+    let taskElements = [];
+    taskElements.push(buildExpandedTaskHeader(task.title, task.description));      
+    taskElements.push(buildExpandedTaskFooter(task.dueDate));
+    return taskElements;
+
+}
+
 function showInbox() {
-    var content = document.createElement('div');
+    let content = document.createElement('div');
     content.classList.add('content');
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
@@ -62,8 +113,15 @@ function showInbox() {
 }
 
 function showToday() {
-    var content = document.createElement('div');
+    let content = document.createElement('div');
     content.classList.add('content');
+    let todayContainer = addElement('div');
+    todayContainer.classList.add('project-container');
+    let header = addElement('div');
+    header.appendChild(addElement('span', `\u{269D}`));
+    header.appendChild(addElement('h1', 'Today'));
+    header.appendChild(addElement('div', format(new Date(),'MMM-do')));
+    
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     allTasks().forEach(function(task){
@@ -71,13 +129,16 @@ function showToday() {
             tasksContainer.appendChild(buildTask(task))
         }
     })
-    content.appendChild(tasksContainer);
+
+    todayContainer.appendChild(header);
+    todayContainer.appendChild(tasksContainer);
+    content.appendChild(todayContainer);
 
     document.body.appendChild(content);
 }
 
 function showUpcoming() {
-    var content = document.createElement('div');
+    let content = document.createElement('div');
     content.classList.add('content');
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
@@ -96,7 +157,17 @@ function addNewTaskToContainer(task) {
     root.appendChild(buildTask(task));
 }
 
+function showTask(taskTitle){
+    let taskContainer = document.getElementById(taskTitle)
+    taskContainer.classList.add('expanded');
+    taskContainer.textContent = '';    
+    let task = allTasks().find(e => e.title = taskTitle);
+    buildExpandedTask(task).forEach( e => taskContainer.appendChild(e));
+    closeExpandedTaskButton(taskTitle);
+    //closeExpandedTaskWindow(taskTitle);
+  
+}
 
 export {
-    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer
+    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit
 }
