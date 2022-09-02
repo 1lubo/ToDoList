@@ -16,7 +16,9 @@ function oneDayDifference(date) {
 
 function displayDateFormat(date){
     
-    date = parseISO(date);
+    if (typeof(date) == 'string'){
+        date = parseISO(date);  
+    } 
     
     if(oneDayDifference(date)) {
         return oneDayDifference(date);
