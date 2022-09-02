@@ -1,7 +1,95 @@
 import { Project,validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject } from "./displayProject";
-import { removeContent } from "./buildingblocks";
-import { showInbox, showToday, showUpcoming } from "./displayTask";
+import { addElement, removeContent } from "./buildingblocks";
+import { showInbox, showToday, showUpcoming, addNewTaskToContainer } from "./displayTask";
+import { validateTaskName, createTask } from "./task";
+
+function newTaskForm(){
+    let formElements = [];
+    let formContainer = addElement('div');
+    formContainer.classList.add('expanded-form-container');    
+    let title = addElement('input');
+    title.setAttribute('type', 'text');
+    title.setAttribute('placeholder', 'Title');
+    title.id = 'task-title';
+    formElements.push(title);
+    let description = addElement('input');
+    description.setAttribute('type', 'text');
+    description.setAttribute('placeholder', 'Description');
+    description.id = 'task-description';
+    formElements.push(description);
+    let dueDate = addElement('input');
+    dueDate.setAttribute('type', 'date');
+    dueDate.id = 'task-dueDate';
+    formElements.push(dueDate);
+    let priority = addElement('div', `\u{1F6A9}`);
+    priority.id = 'task-priority'
+    formElements.push(priority);
+    let submitFormButton = addElement('button', 'Add Task');
+    submitFormButton.id = 'add-task';
+    formElements.push(submitFormButton);
+    let cancelFormButton = addElement('button', 'Cancel');    
+    cancelFormButton.id = 'cancel-task-form';
+    formElements.push(cancelFormButton);
+    formElements.forEach( e => formContainer.appendChild(e));
+
+    return formContainer;
+
+}
+
+function getTaskTitleFromForm() {
+    return document.getElementById('task-title').value
+}
+
+function getTaskDescriptionFromForm() {
+    return document.getElementById('task-description').value
+}
+
+function getTaskDueDateFromForm() {
+    return document.getElementById('task-dueDate').value
+}
+
+function clearTaskForm() {
+    document.getElementById('task-title').value = '';
+    document.getElementById('task-description').value = '';
+    document.getElementById('task-dueDate').value = '';
+}
+
+function showNewTaskForm(){
+    let root = document.getElementsByClassName('project-tasks')[0];
+    root.prepend(newTaskForm());
+    hideNewTaskFormButton();
+    createNewTaskButton();
+}
+
+function hideNewTaskForm(){
+    let form = document.getElementsByClassName('expanded-form-container')[0];
+    form.remove();
+}
+
+
+function showNewTaskFormButton(){
+    document.getElementById('new-task').addEventListener('click', function(){showNewTaskForm()})
+    
+    
+}
+
+function hideNewTaskFormButton(){
+    document.getElementById('cancel-task-form').addEventListener('click', function(){hideNewTaskForm()})
+}
+
+function createNewTaskButton() {
+    document.getElementById('add-task').addEventListener('click', function(){
+        if(validateTaskName(getTaskTitleFromForm(), 'Inbox') === true) {
+            let newTask = createTask(getTaskTitleFromForm(), 'Inbox', getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+            addNewTaskToContainer(newTask);
+            clearTaskForm();
+            hideNewTaskForm();
+        } else {
+            alert(validateTaskName(getTaskTitleFromForm(), 'Inbox'));
+        }
+    })
+}
 
 function showNewProjectForm(){    
     document.getElementsByClassName('projects-form')[0].classList.remove('hide');
@@ -86,6 +174,7 @@ function buttons() {
         cancelNewProjectFormButton();
         navbarLinks();
         projectLinks();
+        showNewTaskFormButton();
         
     })
 }
