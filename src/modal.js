@@ -1,5 +1,5 @@
 import { addElement } from "./buildingblocks";
-import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton } from "./formsAndButtons";
+import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton } from "./formsAndButtons";
 import { allTasks } from "./storage";
 import { buildExpandedTask } from "./displayTask"
 
@@ -21,8 +21,11 @@ function showTaskModal(taskTitle){
     modal.id = 'myModal';
     let modalContent = addElement('div');
     modalContent.classList.add('modal-content');    
-    let task = allTasks().find(e => e.title = taskTitle);
-    buildExpandedTask(task).forEach( e => modalContent.appendChild(e));    
+
+    console.log(taskTitle)
+    let task = allTasks().find(e => e.title == taskTitle); 
+       
+    buildExpandedTask(task).forEach( e => modalContent.appendChild(e));      
     let submitFormButton = addElement('button', 'Save');
     submitFormButton.id = 'close-expanded-task';
     modalContent.appendChild(submitFormButton);
@@ -37,6 +40,7 @@ function showTaskModal(taskTitle){
     root.appendChild(modal);
     hideNewTaskFormButton();
     closeExpandedTaskButton(taskTitle); 
+    priorityDropDownButton();
 }
 
 export {
