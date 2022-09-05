@@ -4,6 +4,7 @@ import { addElement, removeContent } from "./buildingblocks";
 import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
 buildTaskAfterEdit } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
+import { newTaskModal, showTaskModal } from "./modal";
 
 function newTaskForm(){
     let formElements = [];
@@ -40,7 +41,8 @@ function newTaskForm(){
 
 function taskLinks(){
     Array.from(document.getElementsByClassName('task-container')).forEach( task => task.addEventListener('click', function(){        
-        showTask(task.id);
+        //showTask(task.id);
+        showTaskModal(task.id);
         
     }, {once: true}))
 }
@@ -59,6 +61,26 @@ function getTaskDueDateFromForm() {
     return dueDate
 }
 
+function getProjectName() {
+    let projectName = document.getElementsByClassName('project-title')[0];
+    if (document.body.contains(projectName)) {
+        return projectName.innerText
+    } else {
+        return 'Inbox';
+    }
+    
+}
+
+//function isNewTaskFormOpen() {
+//    let newTaskForm = document.getElementsByClassName('expanded-form-container')[0];
+//    
+//    if (document.body.contains(newTaskForm)){
+//        return true;
+//    }
+//
+//    return false
+//}
+
 function clearTaskForm() {
     document.getElementById('task-title').value = '';
     document.getElementById('task-description').value = '';
@@ -67,13 +89,24 @@ function clearTaskForm() {
 
 function showNewTaskForm(){
     let root = document.getElementsByClassName('project-tasks')[0];
-    root.prepend(newTaskForm());
+
+    root.appendChild(newTaskModal())
     hideNewTaskFormButton();
-    createNewTaskButton();
+    createNewTaskButton(); 
+//
+    //if (!isNewTaskFormOpen()) {
+    //    root.prepend(newTaskForm());
+    //    hideNewTaskFormButton();
+    //    createNewTaskButton(); 
+    //} 
+    
 }
 
 function hideNewTaskForm(){
-    let form = document.getElementsByClassName('expanded-form-container')[0];
+    //let form = document.getElementsByClassName('expanded-form-container')[0];
+    //form.remove();
+
+    let form = document.getElementById('myModal');
     form.remove();
 }
 
@@ -90,26 +123,33 @@ function hideNewTaskFormButton(){
 
 function createNewTaskButton() {
     document.getElementById('add-task').addEventListener('click', function(){
-        if(validateTaskName(getTaskTitleFromForm(), 'Inbox') === true) {
-            let newTask = createTask(getTaskTitleFromForm(), 'Inbox', getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+        if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
+            let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
             addNewTaskToContainer(newTask);
             clearTaskForm();
             hideNewTaskForm();
         } else {
-            alert(validateTaskName(getTaskTitleFromForm(), 'Inbox'));
+            alert(validateTaskName(getTaskTitleFromForm(), getProjectName()));
         }
     })
 }
 
 function closeExpandedTask(taskTitle) {
-    localStorage.removeItem(taskTitle);
-    let newTask = createTask(getTaskTitleFromForm(), 'Inbox', getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+    localStorage.removeItem(taskTitle);    
+    let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
     let taskContainer = document.getElementById(taskTitle)
     
     taskContainer.textContent = '';
     buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
+    hideNewTaskForm();
     
 }
+
+//function isExpandedTaskOpen() {
+//    Array.from(document.getElementsByClassName('task-container')).forEach( task => {if(task.classList.contains('expanded')) {
+//        console.log('Open Form');
+//    }} )
+//}
 
 /*function closeExpandedTaskWindow(taskTitle) {
     window.onclick = function(event) {
@@ -142,6 +182,7 @@ function createNewProjectButton() {
             addProjectToNavbar(getNameFromForm());
             clearForm();
             hideNewProjectForm();
+            projectLinks();
         } else {
             alert(validateName(getNameFromForm()))
     }
@@ -218,5 +259,5 @@ function buttons() {
 
 
 export {
-    buttons, closeExpandedTaskButton, closeExpandedTask
+    buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton
 }
