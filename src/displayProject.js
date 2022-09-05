@@ -24,6 +24,7 @@ function buildProject(projectString) {
 
 function addProjectToNavbar(projectTitle){
     let project = addElement('div', projectTitle);
+    project.classList.add('navbar-project');
     project.id = `${projectTitle}`
     let projectList = document.getElementsByClassName('projects-list')[0]
     projectList.appendChild(project);
