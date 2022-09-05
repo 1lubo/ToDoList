@@ -2,19 +2,23 @@ import { addElement } from "./buildingblocks";
 import { createObject, allTasks } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } from "./formsAndButtons";
-const {format} = require('date-fns');
+const {format, add} = require('date-fns');
 import { newTaskModal } from "./modal";
 
 function buildTaskHeader(title, priority){
     let taskHeader = addElement('div');
     taskHeader.classList.add('task-header');
-    let taskCompleted = addElement('input');
-    taskCompleted.setAttribute('type', 'checkbox');
-    taskCompleted.classList.add(`priority-${priority}`);
-    taskCompleted.classList.add('checkmark');
+    //let checkboxlabel = addElement('label');
+    //let pseudoCheckbox = addElement('span');
+    //let taskCompleted = addElement('input');
+    //taskCompleted.setAttribute('type', 'checkbox');
+    //taskCompleted.classList.add(`priority-${priority}`);
+    //taskCompleted.classList.add('checkmark');
+    //checkboxlabel.appendChild(taskCompleted);
+    //checkboxlabel.appendChild(pseudoCheckbox);
     let taskTitle = addElement('h1', title);
     taskTitle.classList.add('task-title');
-    taskHeader.appendChild(taskCompleted);
+    //taskHeader.appendChild(checkboxlabel);
     taskHeader.appendChild(taskTitle);
 
     return taskHeader
@@ -49,7 +53,7 @@ function buildTaskFooter(dueDate){
     let taskDueDate = addElement('div', date);
     let dateIcon = addElement('span');
     dateIcon.innerText = `\u{1F4C5}`
-    taskDueDate.appendChild(dateIcon);
+    //taskDueDate.appendChild(dateIcon);
     taskDueDate.classList.add('task-date');
     taskFooter.appendChild(taskDueDate);
     
@@ -57,7 +61,7 @@ function buildTaskFooter(dueDate){
 
 }
 
-function buildExpandedTaskFooter(dueDate) {
+function buildExpandedTaskFooter(dueDate, priority) {
     let taskFooter = addElement('div');
     taskFooter.classList.add('task-footer'); 
     let taskDueDate = addElement('input');
@@ -65,10 +69,53 @@ function buildExpandedTaskFooter(dueDate) {
     taskDueDate.value = dueDate;
     taskDueDate.id = 'task-dueDate';
 
-    taskFooter.appendChild(taskDueDate);
+    taskFooter.appendChild(taskDueDate);    
+    taskFooter.appendChild(buildTaskPriorityDropdown(priority));
     
     return taskFooter;
 }
+
+function buildTaskPriorityDropdown(priority=null){
+    let text = '';
+    switch (priority) {
+        case 1:
+            text = 'priority-1'
+            break;
+        case 2:
+            text = 'priority-2'
+            break;
+        case 3:
+            text = 'priority-3'
+            break;
+        default:
+            text = 'priority-4'
+    }
+    let dropDown = addElement('div');
+    dropDown.classList.add('dropdown');
+    let dropDownButton = addElement('div', `\u{2691}`);
+    dropDownButton.classList.add('dropbtn', text);
+    let dropDownContent = addElement('div');
+    dropDownContent.classList.add('dropdown-content');
+    let high = addElement('div', 'Priority 1 - High');
+    high.id = "1";
+    let medium = addElement('div', 'Priority 2 - Medium');
+    medium.id = "2";
+    let low = addElement('div', 'Priority 3 - Low');
+    low.id = "3";
+    let noPriority = addElement('div', 'Priority 4 - None');
+    noPriority.id = "4";
+    dropDown.appendChild(dropDownButton);    
+    dropDown.appendChild(dropDownContent);
+    dropDownContent.appendChild(high);
+    dropDownContent.appendChild(medium);
+    dropDownContent.appendChild(low);
+    dropDownContent.appendChild(noPriority);
+
+    return dropDown;
+
+}
+
+
 
 function buildTask(task) {
     let taskElements = [];        
@@ -79,8 +126,17 @@ function buildTask(task) {
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
     taskContainer.id = task.title;
-
-    return taskContainer;
+    let container = addElement('div');
+    let checkboxlabel = addElement('label');
+    let pseudoCheckbox = addElement('span');
+    let taskCompleted = addElement('input');
+    taskCompleted.setAttribute('type', 'checkbox');
+    pseudoCheckbox.classList.add(`priority-${task.priority}`);    
+    checkboxlabel.appendChild(taskCompleted);
+    checkboxlabel.appendChild(pseudoCheckbox);
+    container.appendChild(taskContainer);
+    container.appendChild(checkboxlabel);
+    return container;
 }
 
 function buildTaskAfterEdit(task) {
@@ -91,9 +147,11 @@ function buildTaskAfterEdit(task) {
 }
 
 function buildExpandedTask(task) {
+    
     let taskElements = [];
-    taskElements.push(buildExpandedTaskHeader(task.title, task.description));      
-    taskElements.push(buildExpandedTaskFooter(task.dueDate));
+    console.log(task);
+    taskElements.push(buildExpandedTaskHeader(task.title, task.description)); 
+    taskElements.push(buildExpandedTaskFooter(task.dueDate, task.priority));
     return taskElements;
 
 }
@@ -162,7 +220,7 @@ function showTask(taskTitle){
     let taskContainer = document.getElementById(taskTitle)
     taskContainer.classList.add('expanded');
     taskContainer.textContent = '';    
-    let task = allTasks().find(e => e.title = taskTitle);
+    let task = allTasks().find(e => e.title = taskTitle);    
     buildExpandedTask(task).forEach( e => taskContainer.appendChild(e));
     closeExpandedTaskButton(taskTitle);
     //closeExpandedTaskWindow(taskTitle);
@@ -172,5 +230,5 @@ function showTask(taskTitle){
 
 
 export {
-    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask
+    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask, buildTaskPriorityDropdown
 }
