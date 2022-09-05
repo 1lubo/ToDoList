@@ -2,7 +2,7 @@ import { Project,validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject } from "./displayProject";
 import { addElement, removeContent } from "./buildingblocks";
 import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
-buildTaskAfterEdit } from "./displayTask";
+buildTaskAfterEdit, buildTaskPriorityDropdown } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 
@@ -24,7 +24,7 @@ function newTaskForm(){
     dueDate.setAttribute('type', 'date');
     dueDate.id = 'task-dueDate';
     formElements.push(dueDate);
-    let priority = addElement('div', `\u{1F6A9}`);
+    let priority = buildTaskPriorityDropdown();
     priority.id = 'task-priority'
     formElements.push(priority);
     let submitFormButton = addElement('button', 'Add Task');
@@ -40,11 +40,10 @@ function newTaskForm(){
 }
 
 function taskLinks(){
-    Array.from(document.getElementsByClassName('task-container')).forEach( task => task.addEventListener('click', function(){        
-        //showTask(task.id);
+    Array.from(document.getElementsByClassName('task-container')).forEach( task => task.addEventListener('click', function(){                
         showTaskModal(task.id);
         
-    }, {once: true}))
+    }))
 }
 
 function getTaskTitleFromForm() {
@@ -59,6 +58,18 @@ function getTaskDueDateFromForm() {
     let dueDate = document.getElementById('task-dueDate').value;
     dueDate ||= new Date();
     return dueDate
+}
+
+function getTaskPriority() {
+    //let priority = document.getElementsByClassName('dropbtn')[0].classList.slice(-1);
+    //if (priority === `\u{2691}`) {
+    //    priority = 4;
+    //}    
+    //return priority; 
+    if (document.getElementsByClassName('dropbtn')[0].classList.length < 3) {
+        return document.getElementsByClassName('dropbtn')[0].classList[1].slice(-1);
+    } 
+    return document.getElementsByClassName('dropbtn')[0].classList[2].slice(-1);
 }
 
 function getProjectName() {
@@ -91,6 +102,7 @@ function showNewTaskForm(){
     let root = document.getElementsByClassName('project-tasks')[0];
 
     root.appendChild(newTaskModal())
+    priorityDropDownButton();
     hideNewTaskFormButton();
     createNewTaskButton(); 
 //
@@ -124,7 +136,7 @@ function hideNewTaskFormButton(){
 function createNewTaskButton() {
     document.getElementById('add-task').addEventListener('click', function(){
         if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
-            let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+            let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
             addNewTaskToContainer(newTask);
             clearTaskForm();
             hideNewTaskForm();
@@ -136,32 +148,96 @@ function createNewTaskButton() {
 
 function closeExpandedTask(taskTitle) {
     localStorage.removeItem(taskTitle);    
-    let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), 4, false, getTaskDescriptionFromForm());
+    let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
     let taskContainer = document.getElementById(taskTitle)
-    
+    let previousPriority = taskContainer.classList[1];
+    taskContainer.classList.remove(previousPriority);
+    taskContainer.classList.add(`priority-${getTaskPriority()}`)
+    taskContainer.id = getTaskTitleFromForm();
     taskContainer.textContent = '';
     buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
     hideNewTaskForm();
     
 }
 
-//function isExpandedTaskOpen() {
-//    Array.from(document.getElementsByClassName('task-container')).forEach( task => {if(task.classList.contains('expanded')) {
-//        console.log('Open Form');
-//    }} )
-//}
-
-/*function closeExpandedTaskWindow(taskTitle) {
-    window.onclick = function(event) {
-        console.log(event.target)
-        if (event.target != document.getElementById(taskTitle)) {
-            closeExpandedTask(taskTitle);
-        }
-      }
-}*/
-
 function closeExpandedTaskButton(taskTitle){
     document.getElementById('close-expanded-task').addEventListener('click', function(){closeExpandedTask(taskTitle)})
+}
+
+
+
+function closeDropdown(priority){    
+    let previousPriority =  document.getElementsByClassName('dropbtn')[0].classList[1];
+    document.getElementsByClassName('dropbtn')[0].classList.remove('hide', previousPriority);
+    document.getElementsByClassName('dropbtn')[0].classList.add('show', `priority-${priority}`);
+    document.getElementsByClassName('dropdown-content')[0].classList.remove('show')
+    document.getElementsByClassName('dropdown-content')[0].classList.add('hide');
+}
+
+function showDropDown(){
+    document.getElementsByClassName('dropbtn')[0].classList.remove('show');
+    document.getElementsByClassName('dropbtn')[0].classList.add('hide');
+    document.getElementsByClassName('dropdown-content')[0].classList.remove('hide');
+    document.getElementsByClassName('dropdown-content')[0].classList.add('show');
+}
+
+function taskPrioritySettingButton() {
+    Array.from(document.querySelector('.dropdown-content').childNodes).forEach(button => button.addEventListener('click', event =>{        
+        closeDropdown(event.target.id);
+    }));
+    
+    
+}
+
+//function taskPrioritySettingButtonHigh() {
+//    
+//    document.getElementsByClassName('dropdown-content')[0].childNodes[0].addEventListener('click', event => {
+//        console.log('High')        
+//        closeDropdown(1);
+//    }, { once: true })
+//
+//    
+//}
+//
+//function taskPrioritySettingButtonMedium() {
+//    
+//    document.getElementsByClassName('dropdown-content')[0].childNodes[1].addEventListener('click', event => {
+//        console.log('Medium')        
+//        closeDropdown(2);
+//    }, { once: true })
+//
+//    
+//}
+//
+//function taskPrioritySettingButtonLow() {
+//    
+//    document.getElementsByClassName('dropdown-content')[0].childNodes[2].addEventListener('click', event => {
+//        console.log('Low');       
+//        closeDropdown(3);
+//    }, { once: true })
+//
+//    
+//}
+//
+//function taskPrioritySettingButtonNone() {
+//    
+//    document.getElementsByClassName('dropdown-content')[0].childNodes[3].addEventListener('click', event => {
+//        console.log('None');        
+//        closeDropdown(4);
+//    }, { once: true })
+//
+//    
+//}
+
+function priorityDropDownButton() {
+    document.getElementsByClassName('dropbtn')[0].addEventListener('click', function(){
+        taskPrioritySettingButton();
+        //taskPrioritySettingButtonHigh();
+        //taskPrioritySettingButtonMedium();
+        //taskPrioritySettingButtonLow();
+        //taskPrioritySettingButtonNone();
+        showDropDown();
+    });
 }
 
 function showNewProjectForm(){    
@@ -209,8 +285,7 @@ function cancelNewProjectFormButton() {
 
 function inbox() {
     document.getElementById('Inbox').addEventListener('click', function(){
-        removeContent();
-        //showInbox();
+        removeContent();        
         showProject('Inbox')
         taskLinks();
     })
@@ -242,6 +317,7 @@ function projectLinks(){
     Array.from(document.getElementsByClassName('navbar-project')).forEach( button => button.addEventListener('click', function(){
         removeContent();
         showProject(button.id);
+        taskLinks();
     }))
 }
 
@@ -259,5 +335,5 @@ function buttons() {
 
 
 export {
-    buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton
+    buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, priorityDropDownButton
 }
