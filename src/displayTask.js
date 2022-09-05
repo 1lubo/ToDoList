@@ -3,6 +3,7 @@ import { createObject, allTasks } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } from "./formsAndButtons";
 const {format} = require('date-fns');
+import { newTaskModal } from "./modal";
 
 function buildTaskHeader(title, priority){
     let taskHeader = addElement('div');
@@ -31,11 +32,11 @@ function buildExpandedTaskHeader(title, description){
     taskDescription.setAttribute('type', 'text');
     taskDescription.value = description;
     taskDescription.id = 'task-description'
-    let closeExpandedTask = addElement('span', `\u{2304}`);
-    closeExpandedTask.id = 'close-expanded-task';
+    //let closeExpandedTask = addElement('span', `\u{2304}`);
+    //closeExpandedTask.id = 'close-expanded-task';
     taskHeader.appendChild(taskTitle);
     taskHeader.appendChild(taskDescription);
-    taskHeader.appendChild(closeExpandedTask);
+    //taskHeader.appendChild(closeExpandedTask);
 
     return taskHeader
 }
@@ -168,6 +169,8 @@ function showTask(taskTitle){
   
 }
 
+
+
 export {
-    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit
+    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask
 }
