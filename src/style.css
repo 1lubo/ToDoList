@@ -14,7 +14,7 @@ body {
     overflow: auto;
 }
 
-.navbarlink, .navbar-project {
+.navbarlink, .navbar-project, .float, .task-container {
     cursor: pointer;
 }
 
@@ -60,29 +60,67 @@ body {
 
 .priority-1 {
     border: 0.25em solid red;
+    color: red;
 }
 
 .priority-2 {
     border: 0.25em solid orange;
+    color: orange;
 }
 
 .priority-3 {
     border: 0.25em solid green;
+    color: green;
 }
 
 .priority-4 {
-    border: 0.25em solid aqua;
+    border: 0.25em solid grey;
+    color: grey;
 }
 
 .task-header {
     display: flex;
 }
 
-.checkmark {
-    width: 1.9em;    
-    border-radius: 0.15em;        
+label input {
+    visibility: hidden;
+    display: block;
+    height: 0;
+    width: 0;
+    position: absolute;
+    overflow: hidden;
 }
 
+label span {
+    height: 1em;
+    width: 1em;    
+    display: inline-block;
+}
+[type=checkbox]:checked + span {
+    background: #050505;
+}
+
+
+.checkmark {
+    /*width: 1.9em;    
+    border-radius: 0.15em;        
+    */
+}
+
+.float {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;	
+	box-shadow: 2px 2px 3px #999;
+}
 .modal {    
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -111,4 +149,59 @@ body {
     float: right;
     font-size: 28px;
     font-weight: bold;
+  }
+
+  /* Style The Dropdown Button */
+.dropbtn {
+    /*background-color: #4CAF50;
+    padding: 16px;
+    color: rgb(0, 0, 0);    */
+    font-size: 1.5em;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* The container <div> - needed to position the dropdown content */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content div {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content div:hover {background-color: #f1f1f1}
+  
+  /* Show the dropdown menu on hover 
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }*/
+  
+  /* Change the background color of the dropdown button when the dropdown content is shown */
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
   }
