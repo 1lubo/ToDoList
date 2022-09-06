@@ -5,6 +5,7 @@ import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask,
 buildTaskAfterEdit, buildTaskPriorityDropdown } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
+import { createObject, saveObject, findObject } from "./storage";
 
 function newTaskForm(){
     let formElements = [];
@@ -40,10 +41,46 @@ function newTaskForm(){
 }
 
 function taskLinks(){
-    Array.from(document.getElementsByClassName('task-container')).forEach( task => task.addEventListener('click', function(){                
+    Array.from(document.getElementsByClassName('task-details-container')).forEach( task => task.addEventListener('click', function(){                
         showTaskModal(task.id);
         
     }))
+}
+
+function completeTaskButtons(){
+    Array.from(document.getElementsByTagName('label')).forEach( label => label.addEventListener('click', (e) => {
+        let taskTitle = label.previousElementSibling.id;
+        if(label.children[0].checked){
+            uncompleteTask(taskTitle);
+            e.preventDefault();
+            label.children[0].checked = false;
+            
+        } else {            
+            completeTask(taskTitle);
+            e.preventDefault();
+            label.children[0].checked = true;
+            
+        }
+    }))
+    
+}
+
+function uncompleteTask(taskTitle){
+    let task = createObject(findObject(taskTitle, 'task'));
+    localStorage.removeItem(taskTitle); 
+    task.completed = false;
+    saveObject(task);
+    let taskHeader = document.getElementById(taskTitle).children[0].firstChild
+    taskHeader.classList.remove('completed');
+}
+
+function completeTask(taskTitle){
+    let task = createObject(findObject(taskTitle, 'task'));
+    localStorage.removeItem(taskTitle); 
+    task.completed = true;
+    saveObject(task);
+    let taskHeader = document.getElementById(taskTitle).children[0].firstChild
+    taskHeader.classList.add('completed')
 }
 
 function getTaskTitleFromForm() {
@@ -61,11 +98,7 @@ function getTaskDueDateFromForm() {
 }
 
 function getTaskPriority() {
-    //let priority = document.getElementsByClassName('dropbtn')[0].classList.slice(-1);
-    //if (priority === `\u{2691}`) {
-    //    priority = 4;
-    //}    
-    //return priority; 
+    
     if (document.getElementsByClassName('dropbtn')[0].classList.length < 3) {
         return document.getElementsByClassName('dropbtn')[0].classList[1].slice(-1);
     } 
@@ -82,15 +115,6 @@ function getProjectName() {
     
 }
 
-//function isNewTaskFormOpen() {
-//    let newTaskForm = document.getElementsByClassName('expanded-form-container')[0];
-//    
-//    if (document.body.contains(newTaskForm)){
-//        return true;
-//    }
-//
-//    return false
-//}
 
 function clearTaskForm() {
     document.getElementById('task-title').value = '';
@@ -105,27 +129,17 @@ function showNewTaskForm(){
     priorityDropDownButton();
     hideNewTaskFormButton();
     createNewTaskButton(); 
-//
-    //if (!isNewTaskFormOpen()) {
-    //    root.prepend(newTaskForm());
-    //    hideNewTaskFormButton();
-    //    createNewTaskButton(); 
-    //} 
-    
+
 }
 
-function hideNewTaskForm(){
-    //let form = document.getElementsByClassName('expanded-form-container')[0];
-    //form.remove();
-
+function hideNewTaskForm(){    
     let form = document.getElementById('myModal');
     form.remove();
 }
 
 
 function showNewTaskFormButton(){
-    document.getElementById('new-task').addEventListener('click', function(){showNewTaskForm()})
-    
+    document.getElementById('new-task').addEventListener('click', function(){showNewTaskForm()})    
     
 }
 
@@ -168,7 +182,6 @@ function closeExpandedTaskButton(taskTitle){
 }
 
 
-
 function closeDropdown(priority){    
     let previousPriority =  document.getElementsByClassName('dropbtn')[0].classList[1];
     document.getElementsByClassName('dropbtn')[0].classList.remove('hide', previousPriority);
@@ -191,8 +204,6 @@ function taskPrioritySettingButton() {
     
     
 }
-
-
 
 function priorityDropDownButton() {
     document.getElementsByClassName('dropbtn')[0].addEventListener('click', function(){
@@ -245,28 +256,58 @@ function cancelNewProjectFormButton() {
 }
 
 function inbox() {
-    document.getElementById('Inbox').addEventListener('click', function(){
+    document.getElementById('Inbox').parentElement.addEventListener('click', function(){
         removeContent();        
         showProject('Inbox')
         taskLinks();
+        completeTaskButtons();
     })
 }
 
 function today() {
-    document.getElementById('Today').addEventListener('click', function(){
+    document.getElementById('Today').parentElement.addEventListener('click', function(){
         removeContent();
         showToday();
         taskLinks();
+        completeTaskButtons();
     })
 }
 
 function upcoming() {
-    document.getElementById('Upcoming').addEventListener('click', function(){
+    document.getElementById('Upcoming').parentElement.addEventListener('click', function(){
         removeContent();
         showUpcoming();
         taskLinks();
+        completeTaskButtons();
     })
 }
+
+
+function showMenu() {
+    document.getElementsByClassName('navbar')[0].classList.replace('hide-on-mobile','show-on-mobile')
+}
+
+function hideMenu() {
+    document.getElementsByClassName('navbar')[0].classList.replace('show-on-mobile','hide-on-mobile')
+}
+
+function showMenuButton() {
+    let button = document.getElementById('responsive-menu');
+    let classList = button.classList
+    button.addEventListener('click', ()=> {
+        if (classList.contains('menu-hidden')) {
+            showMenu();
+            button.classList.replace('menu-hidden', 'menu-shown')
+            button.innerHTML = `\u{2716}`
+        } else {
+            hideMenu();
+            button.classList.replace('menu-shown','menu-hidden')
+            button.innerHTML = `\u{2630}`
+        }
+    })
+    
+}
+
 
 function navbarLinks() {
    inbox();
@@ -290,6 +331,8 @@ function buttons() {
         navbarLinks();
         projectLinks();
         showNewTaskFormButton();
+        completeTaskButtons();
+        showMenuButton();
         
     })
 }
