@@ -5,6 +5,7 @@ function Project (title) {
     this.type = 'project';
     this.title = title;
     this.tasks = [];
+    this.completed = false;
 }
 
 Project.prototype.getTasks = function () {    
