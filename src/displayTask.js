@@ -148,8 +148,7 @@ function buildTaskAfterEdit(task) {
 
 function buildExpandedTask(task) {
     
-    let taskElements = [];
-    console.log(task);
+    let taskElements = [];    
     taskElements.push(buildExpandedTaskHeader(task.title, task.description)); 
     taskElements.push(buildExpandedTaskFooter(task.dueDate, task.priority));
     return taskElements;
