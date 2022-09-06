@@ -2,29 +2,39 @@
 body {
     height: 100vh;
     margin: 0;
+    
 }
 
 .navbar {
+    font-size: 1.5em;
+    color: rgba(240, 248, 255, 0.652);
     position: fixed;
     height: 100%;
     margin: 0;
     padding: 0;
     width: 25%;
-    background-color: #f1f1f1;
+    background-color: #333;
     overflow: auto;
+    transition: width 0.5s;
 }
 
-.navbarlink, .navbar-project, .float, .task-container {
+.navbarlink, .projects-header span, .navbar-project {
+    padding: 0.5em;
+    border-radius: 8px;
+}
+
+.navbarlink, .navbar-project, .float, .task-details-container, .hamburger-float, .projects-header span  {
     cursor: pointer;
 }
 
-.navbarlink:hover, .navbar-project:hover {
-    background-color: aquamarine;
+.navbarlink:hover, .navbar-project:hover, .projects-header span:hover {
+    background-color: rgba(78, 78, 78, 0.435);
 }
 
 .content {
     margin-left: 25%;
     min-height: 100vh;
+    background-color: #a3b6c796;
 }
 
 .projects-header, .navbarlink {
@@ -34,11 +44,25 @@ body {
 }
 
 .project-container {
-    margin: 0 0.2em 0.2em 0.2em ;
+     /*margin: 0 0.2em 0.2em 0.2em ;
     padding: 1em;
     border-radius: 8px;
     border: 5px solid black;
-    background-color: rgba(137, 43, 226, 0.341);
+    background-color: rgba(137, 43, 226, 0.341);*/
+}
+
+.project-title {
+    margin-top: 0;
+}
+
+.projects-list {
+    display: flex;
+    
+}
+.navbar-project {
+    width: 100%;
+    text-align: center;
+    
 }
 
 .projects-form {
@@ -51,11 +75,6 @@ body {
 
 .hide {
     display: none;
-}
-
-#show-projects-form{
-    cursor: pointer;
-    padding: 1em;
 }
 
 .priority-1 {
@@ -78,9 +97,49 @@ body {
     color: grey;
 }
 
-.task-header {
-    display: flex;
+.completed {
+    text-decoration: line-through;
 }
+
+.task-header {    
+    /*display: flex;*/
+    min-width: 0;
+}
+
+.task-title {
+    /*min-width: 0;*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+}
+
+.task-container{ 
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+    padding: 1em 30%;
+    justify-items: flex-start;
+    /*min-width: 45%;*/
+}
+
+.task-details-container, .task-container label {
+    padding: 0 1em;
+}
+
+.task-details-container {
+    box-shadow: 2px 2px 3px #999;
+    border: none;
+    border-radius: 8px;
+    width: 65%;
+}
+
+.task-details-container:hover {
+    background-color: #7e8d9a96;
+
+}
+
 
 label input {
     visibility: hidden;
@@ -100,14 +159,9 @@ label span {
     background: #050505;
 }
 
-
-.checkmark {
-    /*width: 1.9em;    
-    border-radius: 0.15em;        
-    */
-}
-
 .float {
+    font-size: 3em;
+    font-weight: bolder;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,8 +170,8 @@ label span {
 	height:60px;
 	bottom:40px;
 	right:40px;
-	background-color:#0C9;
-	color:#FFF;
+	background-color:#333;
+	color:rgba(240, 248, 255, 0.652);;
 	border-radius:50px;	
 	box-shadow: 2px 2px 3px #999;
 }
@@ -196,12 +250,40 @@ label span {
   /* Change color of dropdown links on hover */
   .dropdown-content div:hover {background-color: #f1f1f1}
   
-  /* Show the dropdown menu on hover 
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }*/
+ 
   
   /* Change the background color of the dropdown button when the dropdown content is shown */
   .dropdown:hover .dropbtn {
     background-color: #3e8e41;
   }
+
+  .hamburger-float {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position:fixed;
+	width:60px;
+	height:60px;
+	top:40px;
+	right:40px;
+	background-color:#333;
+	color:rgba(240, 248, 255, 0.652);
+	border-radius:50px;	
+	box-shadow: 2px 2px 3px #999;
+    font-size: 2em;
+  }
+
+
+  @media screen and (max-width: 575px) {
+    .hamburger-float{display: flex;}
+    .navbar{width: 0;}
+    .content{margin-left: 0;}
+    .show-on-mobile {width: 50%;
+        z-index: 1;
+        
+    }    
+    .hide-on-mobile {width: 0;}
+}
+
+
+  
