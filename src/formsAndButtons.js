@@ -151,8 +151,11 @@ function closeExpandedTask(taskTitle) {
     let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
     let taskContainer = document.getElementById(taskTitle)
     let previousPriority = taskContainer.classList[1];
+    let taskCheckbox = taskContainer.nextElementSibling.children[1];
     taskContainer.classList.remove(previousPriority);
+    taskCheckbox.classList.remove(previousPriority);
     taskContainer.classList.add(`priority-${getTaskPriority()}`)
+    taskCheckbox.classList.add(`priority-${getTaskPriority()}`);
     taskContainer.id = getTaskTitleFromForm();
     taskContainer.textContent = '';
     buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
@@ -189,53 +192,11 @@ function taskPrioritySettingButton() {
     
 }
 
-//function taskPrioritySettingButtonHigh() {
-//    
-//    document.getElementsByClassName('dropdown-content')[0].childNodes[0].addEventListener('click', event => {
-//        console.log('High')        
-//        closeDropdown(1);
-//    }, { once: true })
-//
-//    
-//}
-//
-//function taskPrioritySettingButtonMedium() {
-//    
-//    document.getElementsByClassName('dropdown-content')[0].childNodes[1].addEventListener('click', event => {
-//        console.log('Medium')        
-//        closeDropdown(2);
-//    }, { once: true })
-//
-//    
-//}
-//
-//function taskPrioritySettingButtonLow() {
-//    
-//    document.getElementsByClassName('dropdown-content')[0].childNodes[2].addEventListener('click', event => {
-//        console.log('Low');       
-//        closeDropdown(3);
-//    }, { once: true })
-//
-//    
-//}
-//
-//function taskPrioritySettingButtonNone() {
-//    
-//    document.getElementsByClassName('dropdown-content')[0].childNodes[3].addEventListener('click', event => {
-//        console.log('None');        
-//        closeDropdown(4);
-//    }, { once: true })
-//
-//    
-//}
+
 
 function priorityDropDownButton() {
     document.getElementsByClassName('dropbtn')[0].addEventListener('click', function(){
-        taskPrioritySettingButton();
-        //taskPrioritySettingButtonHigh();
-        //taskPrioritySettingButtonMedium();
-        //taskPrioritySettingButtonLow();
-        //taskPrioritySettingButtonNone();
+        taskPrioritySettingButton();        
         showDropDown();
     });
 }
