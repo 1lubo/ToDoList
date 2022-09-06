@@ -20,9 +20,7 @@ function showTaskModal(taskTitle){
     modal.classList.add('modal');
     modal.id = 'myModal';
     let modalContent = addElement('div');
-    modalContent.classList.add('modal-content');    
-
-    console.log(taskTitle)
+    modalContent.classList.add('modal-content');        
     let task = allTasks().find(e => e.title == taskTitle); 
        
     buildExpandedTask(task).forEach( e => modalContent.appendChild(e));      
