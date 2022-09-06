@@ -48,24 +48,21 @@ function taskLinks(){
 }
 
 function completeTaskButtons(){
-    Array.from(document.getElementsByTagName('label')).forEach( label => label.addEventListener('click', (e) => {
-        let taskTitle = label.previousElementSibling.id;
-        if(label.children[0].checked){
+    Array.from(document.querySelectorAll('input[type=checkbox]')).forEach( input => input.addEventListener('click', (e) => {
+        let taskTitle = input.nextElementSibling.id;
+        
+        if(input.checked){            
+            completeTask(taskTitle);            
+            
+        } else {  
             uncompleteTask(taskTitle);
-            e.preventDefault();
-            label.children[0].checked = false;
-            
-        } else {            
-            completeTask(taskTitle);
-            e.preventDefault();
-            label.children[0].checked = true;
-            
         }
     }))
     
 }
 
 function uncompleteTask(taskTitle){
+    
     let task = createObject(findObject(taskTitle, 'task'));
     localStorage.removeItem(taskTitle); 
     task.completed = false;
@@ -75,6 +72,7 @@ function uncompleteTask(taskTitle){
 }
 
 function completeTask(taskTitle){
+    
     let task = createObject(findObject(taskTitle, 'task'));
     localStorage.removeItem(taskTitle); 
     task.completed = true;
@@ -165,7 +163,7 @@ function closeExpandedTask(taskTitle) {
     let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
     let taskContainer = document.getElementById(taskTitle)
     let previousPriority = taskContainer.classList[1];
-    let taskCheckbox = taskContainer.nextElementSibling.children[1];
+    let taskCheckbox = taskContainer.previousElementSibling;
     taskContainer.classList.remove(previousPriority);
     taskCheckbox.classList.remove(previousPriority);
     taskContainer.classList.add(`priority-${getTaskPriority()}`)
