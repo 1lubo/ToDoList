@@ -5,15 +5,20 @@ import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } f
 const {format, add} = require('date-fns');
 import { newTaskModal } from "./modal";
 
-function buildTaskHeader(title, completed){
+function buildTaskHeader(title, completed, description){
     let taskHeader = addElement('div');
     taskHeader.classList.add('task-header');    
     let taskTitle = addElement('h2', title);
     taskTitle.classList.add('task-title'); 
     if (completed) {
         taskTitle.classList.add('completed');
-    }
+    }    
     taskHeader.appendChild(taskTitle);
+    if (description) {
+        let taskDescription = addElement('div', description);
+        taskDescription.classList.add('task-description');
+        taskHeader.appendChild(taskDescription);
+    }
 
     return taskHeader
     
@@ -111,30 +116,32 @@ function buildTask(task) {
     let taskContainer = addElement('div');
     taskContainer.classList.add('task-details-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
-    taskElements.push(buildTaskHeader(task.title, task.completed));      
+    taskElements.push(buildTaskHeader(task.title, task.completed, task.description));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
     taskContainer.id = task.title;
     let container = addElement('div');
     container.classList.add('task-container')
-    let checkboxlabel = addElement('label');
-    let pseudoCheckbox = addElement('span');
+    //let checkboxlabel = addElement('label');
+    //let pseudoCheckbox = addElement('span');
     let taskCompleted = addElement('input');
     taskCompleted.setAttribute('type', 'checkbox');
     if (task.completed) {
         taskCompleted.setAttribute('checked', 'true');
     }
-    pseudoCheckbox.classList.add(`priority-${task.priority}`);    
-    checkboxlabel.appendChild(taskCompleted);
-    checkboxlabel.appendChild(pseudoCheckbox);
-    container.appendChild(checkboxlabel);
+    //pseudoCheckbox.classList.add(`priority-${task.priority}`);    
+    //checkboxlabel.appendChild(taskCompleted);
+    //checkboxlabel.appendChild(pseudoCheckbox);
+    //container.appendChild(checkboxlabel);
+    taskCompleted.classList.add(`priority-${task.priority}`);
+    container.appendChild(taskCompleted)
     container.appendChild(taskContainer);    
     return container;
 }
 
 function buildTaskAfterEdit(task) {
     let taskElements = [];
-    taskElements.push(buildTaskHeader(task.title, task.completed));      
+    taskElements.push(buildTaskHeader(task.title, task.completed, task.description));      
     taskElements.push(buildTaskFooter(task.dueDate));
     return taskElements;
 }
