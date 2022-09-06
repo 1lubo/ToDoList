@@ -3,21 +3,30 @@ import { addProjectToNavbar } from './displayProject';
 import { allProjects } from './storage';
 
 function addTaskButton() {
-    let addTaskButton = addElement('a', `\u{2795}`);
+    let addTaskButton = addElement('a', `\u{002B}`);
     addTaskButton.classList.add('float')
     addTaskButton.id = 'new-task';
     document.body.appendChild(addTaskButton);
+    
+}
+
+function addNavHamburger() {
+    let hamburger = addElement('a', `\u{2630}`);
+    hamburger.classList.add('hamburger-float', 'menu-hidden');
+    hamburger.id = 'responsive-menu';
+    document.body.appendChild(hamburger);
 }
 
 function createNavBar(){    
     let navBarContainer = addElement('div');
-    navBarContainer.classList.add('navbar');
-    let navbarLinks = [['Inbox', `\u{1F4E5}`], ['Today', `\u{2605}`], ['Upcoming', `\u{1F4C5}`]];
+    navBarContainer.classList.add('navbar', 'hide-on-mobile');
+    let navbarLinks = [['Inbox', `\u{2709}`], ['Today', `\u{2605}`], ['Upcoming', `\u{226B}`]];
     
     navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
     navBarContainer.appendChild(createProjectsSection());
     document.body.appendChild(navBarContainer);
     addTaskButton();
+    addNavHamburger();
 }
 
 function createNavLink(text, icon){
