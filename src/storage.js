@@ -47,7 +47,7 @@ function checkStorageAvailable() {
         if(type == 'project') {            
             return new Project(title);
         } else if (type == 'task') {
-            return new Task(title, obj.project, obj.dueDate, obj.priority, obj.completed);
+            return new Task(title, obj.project, obj.dueDate, obj.priority, obj.completed, obj.description);
         }
     }
 
@@ -65,6 +65,16 @@ function checkStorageAvailable() {
             return false;
         }
         
+    }
+
+    function archiveObject(title, type) {
+        let object = findObject(title, type);
+
+        if (object) {
+            object = createObject(object);
+        }
+        object.completed = true;
+        saveObject(object);
     }
 
     function allTasks () {
@@ -112,5 +122,5 @@ function checkStorageAvailable() {
   
 
 export {
-    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames, projectTaskNames
+    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames, projectTaskNames, archiveObject
 }
