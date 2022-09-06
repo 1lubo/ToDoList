@@ -5,20 +5,14 @@ import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } f
 const {format, add} = require('date-fns');
 import { newTaskModal } from "./modal";
 
-function buildTaskHeader(title, priority){
+function buildTaskHeader(title, completed){
     let taskHeader = addElement('div');
-    taskHeader.classList.add('task-header');
-    //let checkboxlabel = addElement('label');
-    //let pseudoCheckbox = addElement('span');
-    //let taskCompleted = addElement('input');
-    //taskCompleted.setAttribute('type', 'checkbox');
-    //taskCompleted.classList.add(`priority-${priority}`);
-    //taskCompleted.classList.add('checkmark');
-    //checkboxlabel.appendChild(taskCompleted);
-    //checkboxlabel.appendChild(pseudoCheckbox);
-    let taskTitle = addElement('h1', title);
-    taskTitle.classList.add('task-title');
-    //taskHeader.appendChild(checkboxlabel);
+    taskHeader.classList.add('task-header');    
+    let taskTitle = addElement('h2', title);
+    taskTitle.classList.add('task-title'); 
+    if (completed) {
+        taskTitle.classList.add('completed');
+    }
     taskHeader.appendChild(taskTitle);
 
     return taskHeader
@@ -35,12 +29,9 @@ function buildExpandedTaskHeader(title, description){
     let taskDescription = addElement('input');
     taskDescription.setAttribute('type', 'text');
     taskDescription.value = description;
-    taskDescription.id = 'task-description'
-    //let closeExpandedTask = addElement('span', `\u{2304}`);
-    //closeExpandedTask.id = 'close-expanded-task';
+    taskDescription.id = 'task-description'   
     taskHeader.appendChild(taskTitle);
-    taskHeader.appendChild(taskDescription);
-    //taskHeader.appendChild(closeExpandedTask);
+    taskHeader.appendChild(taskDescription);    
 
     return taskHeader
 }
@@ -51,9 +42,7 @@ function buildTaskFooter(dueDate){
     dueDate ||= new Date();
     let date = displayDateFormat(dueDate);
     let taskDueDate = addElement('div', date);
-    let dateIcon = addElement('span');
-    dateIcon.innerText = `\u{1F4C5}`
-    //taskDueDate.appendChild(dateIcon);
+    let dateIcon = addElement('span');    
     taskDueDate.classList.add('task-date');
     taskFooter.appendChild(taskDueDate);
     
@@ -120,28 +109,32 @@ function buildTaskPriorityDropdown(priority=null){
 function buildTask(task) {
     let taskElements = [];        
     let taskContainer = addElement('div');
-    taskContainer.classList.add('task-container');
+    taskContainer.classList.add('task-details-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
-    taskElements.push(buildTaskHeader(task.title, task.priority));      
+    taskElements.push(buildTaskHeader(task.title, task.completed));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
     taskContainer.id = task.title;
     let container = addElement('div');
+    container.classList.add('task-container')
     let checkboxlabel = addElement('label');
     let pseudoCheckbox = addElement('span');
     let taskCompleted = addElement('input');
     taskCompleted.setAttribute('type', 'checkbox');
+    if (task.completed) {
+        taskCompleted.setAttribute('checked', 'true');
+    }
     pseudoCheckbox.classList.add(`priority-${task.priority}`);    
     checkboxlabel.appendChild(taskCompleted);
     checkboxlabel.appendChild(pseudoCheckbox);
-    container.appendChild(taskContainer);
     container.appendChild(checkboxlabel);
+    container.appendChild(taskContainer);    
     return container;
 }
 
 function buildTaskAfterEdit(task) {
     let taskElements = [];
-    taskElements.push(buildTaskHeader(task.title, task.priority));      
+    taskElements.push(buildTaskHeader(task.title, task.completed));      
     taskElements.push(buildTaskFooter(task.dueDate));
     return taskElements;
 }
@@ -175,9 +168,9 @@ function showToday() {
     content.classList.add('content');
     let todayContainer = addElement('div');
     todayContainer.classList.add('project-container');
-    let header = addElement('div');
-    header.appendChild(addElement('span', `\u{269D}`));
-    header.appendChild(addElement('h1', 'Today'));
+    let header = addElement('h1', 'Today');
+    header.classList.add('project-title');
+    header.appendChild(addElement('span', `\u{269D}`));    
     header.appendChild(addElement('div', format(new Date(),'MMM-do')));
     
     let tasksContainer = addElement('div');
@@ -200,12 +193,19 @@ function showUpcoming() {
     content.classList.add('content');
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
+    let upcomingContainer = addElement('div');
+    upcomingContainer.classList.add('project-container');
+    let header = addElement('h1', 'Upcoming');    
+    header.classList.add('project-title');
     allTasks().forEach(function(task){
         if(isInFuture(task.dueDate)) {
             tasksContainer.appendChild(buildTask(task))
         }
     })
-    content.appendChild(tasksContainer);
+
+    upcomingContainer.appendChild(header);
+    upcomingContainer.appendChild(tasksContainer);
+    content.appendChild(upcomingContainer);    
 
     document.body.appendChild(content);
 }
