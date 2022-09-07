@@ -5,10 +5,10 @@ import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, co
 const {format, add} = require('date-fns');
 import { newTaskModal, showTaskModal } from "./modal";
 
-function buildTaskHeader(title, completed, description){
+function buildTaskHeader(title, project, completed, description){
     let taskHeader = addElement('div');
     taskHeader.classList.add('task-header');    
-    let taskTitle = addElement('h2', title);
+    let taskTitle = addElement('h2', title + ' ' +project);
     taskTitle.classList.add('task-title'); 
     if (completed) {
         taskTitle.classList.add('completed');
@@ -56,17 +56,20 @@ function buildTaskFooter(dueDate){
 }
 
 function buildExpandedTaskFooter(dueDate, priority) {
-    let taskFooter = []
-    //taskFooter.classList.add('task-footer'); 
+    //let taskFooter = []
+    let dateAndPriority = addElement('div');
+    dateAndPriority.classList.add('datepriority-container');
     let taskDueDate = addElement('input');
     taskDueDate.setAttribute('type', 'date')
     taskDueDate.value = dueDate;
     taskDueDate.id = 'task-dueDate';
 
-    taskFooter.push(taskDueDate);    
-    taskFooter.push(buildTaskPriorityDropdown(priority));
+    //taskFooter.push(taskDueDate);    
+    //taskFooter.push(buildTaskPriorityDropdown(priority));
+    dateAndPriority.appendChild(taskDueDate);
+    dateAndPriority.appendChild(buildTaskPriorityDropdown(priority))
     
-    return taskFooter;
+    return dateAndPriority;
 }
 
 function buildTaskPriorityDropdown(priority=null){
@@ -92,12 +95,16 @@ function buildTaskPriorityDropdown(priority=null){
     dropDownContent.classList.add('dropdown-content');
     let high = addElement('div', 'Priority 1 - High');
     high.id = "1";
+    high.setAttribute('style', 'color:red;')
     let medium = addElement('div', 'Priority 2 - Medium');
     medium.id = "2";
+    medium.setAttribute('style', 'color:orange;')
     let low = addElement('div', 'Priority 3 - Low');
     low.id = "3";
+    low.setAttribute('style', 'color:green;')
     let noPriority = addElement('div', 'Priority 4 - None');
     noPriority.id = "4";
+    noPriority.setAttribute('style', 'color:gray;')
     dropDown.appendChild(dropDownButton);    
     dropDown.appendChild(dropDownContent);
     dropDownContent.appendChild(high);
@@ -116,7 +123,7 @@ function buildTask(task) {
     let taskContainer = addElement('div');
     taskContainer.classList.add('task-details-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
-    taskElements.push(buildTaskHeader(task.title, task.completed, task.description));      
+    taskElements.push(buildTaskHeader(task.title, task.project ,task.completed, task.description));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
     taskContainer.id = task.title;    
@@ -156,7 +163,8 @@ function buildExpandedTask(task) {
     let header = buildExpandedTaskHeader(task.title, task.description);
     let footer = buildExpandedTaskFooter(task.dueDate, task.priority);
     taskElements.push(header[0], header[1]); 
-    taskElements.push(footer[0], footer[1]);
+    //taskElements.push(footer[0], footer[1]);
+    taskElements.push(footer);
     return taskElements;
 
 }
