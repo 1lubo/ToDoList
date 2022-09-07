@@ -121,11 +121,12 @@ function checkStorageAvailable() {
     function allProjects () {
         let allProjects = [];
         Object.keys(localStorage).forEach(function(key){
-            if(localStorage.getItem(key).includes(`"type":"project"`)){
+            let object = createObject(localStorage.getItem(key));
+            if(object.type == 'project'){                
                 allProjects.push(createObject(localStorage.getItem(key)))
             }
         })
-
+        
         return allProjects
     }
 
