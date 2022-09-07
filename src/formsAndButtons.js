@@ -1,16 +1,18 @@
 import { Project,validateName, createProject } from "./project";
-import { addProjectToNavbar, showProject } from "./displayProject";
+import { addProjectToNavbar, showProject, removeProjectFromNavbar } from "./displayProject";
 import { addElement, removeContent } from "./buildingblocks";
 import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
-buildTaskAfterEdit, buildTaskPriorityDropdown } from "./displayTask";
+buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
-import { createObject, saveObject, findObject } from "./storage";
+import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
 
 function newTaskForm(){
     let formElements = [];
+    let modalContent = addElement('div');
+    modalContent.classList.add('modal-content');
     let formContainer = addElement('div');
-    formContainer.classList.add('expanded-form-container');    
+    formContainer.classList.add('modal-form');    
     let title = addElement('input');
     title.setAttribute('type', 'text');
     title.setAttribute('placeholder', 'Title');
@@ -28,27 +30,32 @@ function newTaskForm(){
     let priority = buildTaskPriorityDropdown();
     priority.id = 'task-priority'
     formElements.push(priority);
+    let formButtons = addElement('div');
     let submitFormButton = addElement('button', 'Add Task');
-    submitFormButton.id = 'add-task';
-    formElements.push(submitFormButton);
+    submitFormButton.id = 'add-task';    
     let cancelFormButton = addElement('button', 'Cancel');    
     cancelFormButton.id = 'cancel-task-form';
-    formElements.push(cancelFormButton);
+    formButtons.appendChild(submitFormButton);
+    formButtons.appendChild(cancelFormButton);    
     formElements.forEach( e => formContainer.appendChild(e));
+    formContainer.appendChild(formButtons);
+    modalContent.appendChild(formContainer)
 
-    return formContainer;
+    return modalContent;
 
 }
 
 function taskLinks(){
-    Array.from(document.getElementsByClassName('task-details-container')).forEach( task => task.addEventListener('click', function(){                
+    Array.from(document.getElementsByClassName('task-details-container')).forEach( task => task.addEventListener('click', function (){                
         showTaskModal(task.id);
         
     }))
 }
 
+
+
 function completeTaskButtons(){
-    Array.from(document.querySelectorAll('input[type=checkbox]')).forEach( input => input.addEventListener('click', (e) => {
+    Array.from(document.querySelectorAll('input[type=checkbox]')).forEach( input => input.addEventListener('click', () => {
         let taskTitle = input.nextElementSibling.id;
         
         if(input.checked){            
@@ -149,7 +156,7 @@ function createNewTaskButton() {
     document.getElementById('add-task').addEventListener('click', function(){
         if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
             let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
-            addNewTaskToContainer(newTask);
+            addNewTaskToContainer(newTask);           
             clearTaskForm();
             hideNewTaskForm();
         } else {
@@ -179,6 +186,14 @@ function closeExpandedTaskButton(taskTitle){
     document.getElementById('close-expanded-task').addEventListener('click', function(){closeExpandedTask(taskTitle)})
 }
 
+function deleteTaskButton(taskTitle){
+
+    document.getElementById('delete-task').addEventListener('click', ()=> {
+        hideNewTaskForm();
+        removeTaskContainer(taskTitle);
+    })
+    
+}
 
 function closeDropdown(priority){    
     let previousPriority =  document.getElementsByClassName('dropbtn')[0].classList[1];
@@ -251,6 +266,20 @@ function showNewProjectFormButton() {
 
 function cancelNewProjectFormButton() {
     document.getElementById('cancel-form').addEventListener('click', function(){hideNewProjectForm()});
+}
+
+
+function deleteProjectButton(){
+    document.getElementById('delete-project').addEventListener('click', (e)=> {
+        let projectTitle = e.target.previousElementSibling.innerHTML
+        removeProjectFromNavbar(projectTitle);
+        deleteProjectTasks(projectTitle);
+        deleteObject(projectTitle, 'project')
+        removeContent();        
+        showProject('Inbox')
+        taskLinks();
+        completeTaskButtons();        
+    })
 }
 
 function inbox() {
@@ -337,5 +366,6 @@ function buttons() {
 
 
 export {
-    buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, priorityDropDownButton
+    buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
+    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton
 }
