@@ -1,9 +1,9 @@
 import { addElement } from "./buildingblocks";
-import { createObject, allTasks } from "./storage";
+import { createObject, allTasks, deleteObject } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
-import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow } from "./formsAndButtons";
+import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
 const {format, add} = require('date-fns');
-import { newTaskModal } from "./modal";
+import { newTaskModal, showTaskModal } from "./modal";
 
 function buildTaskHeader(title, completed, description){
     let taskHeader = addElement('div');
@@ -25,8 +25,8 @@ function buildTaskHeader(title, completed, description){
 }
 
 function buildExpandedTaskHeader(title, description){
-    let taskHeader = addElement('div');
-    taskHeader.classList.add('task-header');
+    let taskHeader = []
+    //taskHeader.classList.add('task-header');
     let taskTitle = addElement('input');
     taskTitle.setAttribute('type', 'text');
     taskTitle.value = title;
@@ -35,8 +35,8 @@ function buildExpandedTaskHeader(title, description){
     taskDescription.setAttribute('type', 'text');
     taskDescription.value = description;
     taskDescription.id = 'task-description'   
-    taskHeader.appendChild(taskTitle);
-    taskHeader.appendChild(taskDescription);    
+    taskHeader.push(taskTitle);
+    taskHeader.push(taskDescription);    
 
     return taskHeader
 }
@@ -56,15 +56,15 @@ function buildTaskFooter(dueDate){
 }
 
 function buildExpandedTaskFooter(dueDate, priority) {
-    let taskFooter = addElement('div');
-    taskFooter.classList.add('task-footer'); 
+    let taskFooter = []
+    //taskFooter.classList.add('task-footer'); 
     let taskDueDate = addElement('input');
     taskDueDate.setAttribute('type', 'date')
     taskDueDate.value = dueDate;
     taskDueDate.id = 'task-dueDate';
 
-    taskFooter.appendChild(taskDueDate);    
-    taskFooter.appendChild(buildTaskPriorityDropdown(priority));
+    taskFooter.push(taskDueDate);    
+    taskFooter.push(buildTaskPriorityDropdown(priority));
     
     return taskFooter;
 }
@@ -119,21 +119,25 @@ function buildTask(task) {
     taskElements.push(buildTaskHeader(task.title, task.completed, task.description));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
-    taskContainer.id = task.title;
+    taskContainer.id = task.title;    
     let container = addElement('div');
-    container.classList.add('task-container')
-    //let checkboxlabel = addElement('label');
-    //let pseudoCheckbox = addElement('span');
+    container.classList.add('task-container')  
     let taskCompleted = addElement('input');
     taskCompleted.setAttribute('type', 'checkbox');
     if (task.completed) {
         taskCompleted.setAttribute('checked', 'true');
-    }
-    //pseudoCheckbox.classList.add(`priority-${task.priority}`);    
-    //checkboxlabel.appendChild(taskCompleted);
-    //checkboxlabel.appendChild(pseudoCheckbox);
-    //container.appendChild(checkboxlabel);
+        }
+    
     taskCompleted.classList.add(`priority-${task.priority}`);
+    taskCompleted.addEventListener('click', ()=> {
+        if(taskCompleted.checked){            
+            completeTask(task.title);            
+            
+        } else {  
+            uncompleteTask(task.title);
+        }
+    })
+
     container.appendChild(taskCompleted)
     container.appendChild(taskContainer);    
     return container;
@@ -148,9 +152,11 @@ function buildTaskAfterEdit(task) {
 
 function buildExpandedTask(task) {
     
-    let taskElements = [];    
-    taskElements.push(buildExpandedTaskHeader(task.title, task.description)); 
-    taskElements.push(buildExpandedTaskFooter(task.dueDate, task.priority));
+    let taskElements = [];        
+    let header = buildExpandedTaskHeader(task.title, task.description);
+    let footer = buildExpandedTaskFooter(task.dueDate, task.priority);
+    taskElements.push(header[0], header[1]); 
+    taskElements.push(footer[0], footer[1]);
     return taskElements;
 
 }
@@ -219,7 +225,22 @@ function showUpcoming() {
 
 function addNewTaskToContainer(task) {
     let root = document.getElementsByClassName('project-tasks')[0];
-    root.appendChild(buildTask(task));
+    let newTask = buildTask(task);
+    newTask.lastChild.addEventListener('click', () => {
+        showTaskModal(task.title);
+    })    
+    root.appendChild(newTask);
+}
+
+function removeTaskContainer(taskTitle) {
+    let root = document.getElementsByClassName('project-tasks')[0];
+
+    if (deleteObject(taskTitle, 'task')) {
+        let taskContainer = root.querySelector(`#${taskTitle}`);
+        taskContainer.parentElement.remove();
+        alert(`Task (${taskTitle}) deleted successfully!`);
+}
+    
 }
 
 function showTask(taskTitle){
@@ -228,13 +249,13 @@ function showTask(taskTitle){
     taskContainer.textContent = '';    
     let task = allTasks().find(e => e.title = taskTitle);    
     buildExpandedTask(task).forEach( e => taskContainer.appendChild(e));
-    closeExpandedTaskButton(taskTitle);
-    //closeExpandedTaskWindow(taskTitle);
+    closeExpandedTaskButton(taskTitle);    
   
 }
 
 
 
 export {
-    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask, buildTaskPriorityDropdown
+    buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask, 
+    buildTaskPriorityDropdown, removeTaskContainer
 }
