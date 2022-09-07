@@ -1,6 +1,7 @@
 import { addElement } from "./buildingblocks";
 import { findObject, createObject } from "./storage";
 import { buildTask } from "./displayTask";
+import { deleteProjectButton } from "./formsAndButtons";
 
 
 function buildProject(projectString) {
@@ -14,10 +15,17 @@ function buildProject(projectString) {
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
+    let deleteProject = addElement('button', 'Delete')
+    deleteProject.id = 'delete-project';
 
     projectContainer.appendChild(projectTitle);
+    
+    if(project.title != 'Inbox'){
+        projectContainer.appendChild(deleteProject);
+        
+    }
     projectContainer.appendChild(tasksContainer);
-
+    
     return projectContainer;
 
 }
@@ -31,8 +39,7 @@ function addProjectToNavbar(projectTitle){
 }
 
 function removeProjectFromNavbar(projectTitle) {
-    let project = document.getElementById(`project-${projectTitle}`)
-    project.remove();
+    document.querySelector('.projects-list').children[projectTitle].remove()
 }
 
 function showProject(projectTitle){
@@ -40,6 +47,9 @@ function showProject(projectTitle){
     document.body.appendChild(addElement('div')).classList.add('content');
     const root = document.getElementsByClassName('content')[0];
     root.appendChild(buildProject(findObject(projectTitle, 'project')));
+    if(projectTitle != 'Inbox'){        
+        deleteProjectButton()
+    }
 }
 
 
