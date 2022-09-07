@@ -77,6 +77,29 @@ function checkStorageAvailable() {
         saveObject(object);
     }
 
+    
+
+    function deleteObject(title, type){
+        let object = findObject(title, type)
+
+        if(object) {
+            localStorage.removeItem(title)
+            return true
+        }
+        return false
+
+    }
+
+    function deleteProjectTasks(projectTitle){
+        Object.keys(localStorage).forEach(function(key){
+            let object = createObject(localStorage.getItem(key));
+
+            if(object.type == 'task' && object.project == projectTitle){
+                localStorage.removeItem(key)
+            }
+        })
+    }
+
     function allTasks () {
         let allTasks = [];
         Object.keys(localStorage).forEach(function(key){
@@ -122,5 +145,6 @@ function checkStorageAvailable() {
   
 
 export {
-    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames, projectTaskNames, archiveObject
+    storageAvailable, checkStorageAvailable, saveObject, findObject, createObject, allTasks, allProjects, existingProjectNames, projectTaskNames,
+    archiveObject, deleteObject, deleteProjectTasks
 }
