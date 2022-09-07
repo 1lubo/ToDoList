@@ -26,10 +26,14 @@ function newTaskForm(){
     let dueDate = addElement('input');
     dueDate.setAttribute('type', 'date');
     dueDate.id = 'task-dueDate';
-    formElements.push(dueDate);
+    //formElements.push(dueDate);
     let priority = buildTaskPriorityDropdown();
     priority.id = 'task-priority'
-    formElements.push(priority);
+    let dateAndPriority = addElement('div');
+    dateAndPriority.classList.add('datepriority-container');
+    dateAndPriority.appendChild(dueDate);
+    dateAndPriority.appendChild(priority);    
+    //formElements.push(priority);
     let formButtons = addElement('div');
     let submitFormButton = addElement('button', 'Add Task');
     submitFormButton.id = 'add-task';    
@@ -38,6 +42,7 @@ function newTaskForm(){
     formButtons.appendChild(submitFormButton);
     formButtons.appendChild(cancelFormButton);    
     formElements.forEach( e => formContainer.appendChild(e));
+    formContainer.appendChild(dateAndPriority);
     formContainer.appendChild(formButtons);
     modalContent.appendChild(formContainer)
 
@@ -58,10 +63,10 @@ function completeTaskButtons(){
     Array.from(document.querySelectorAll('input[type=checkbox]')).forEach( input => input.addEventListener('click', () => {
         let taskTitle = input.nextElementSibling.id;
         
-        if(input.checked){            
+        if(input.checked){                    
             completeTask(taskTitle);            
             
-        } else {  
+        } else {                    
             uncompleteTask(taskTitle);
         }
     }))
@@ -72,21 +77,28 @@ function uncompleteTask(taskTitle){
     
     let task = createObject(findObject(taskTitle, 'task'));
     localStorage.removeItem(taskTitle); 
-    task.completed = false;
-    saveObject(task);
-    let taskHeader = document.getElementById(taskTitle).children[0].firstChild
-    taskHeader.classList.remove('completed');
+    if(task)    {
+        task.completed = false;
+        saveObject(task);
+        let taskHeader = document.getElementById(taskTitle).children[0].firstChild
+        taskHeader.classList.remove('completed');
+    }
+    
+    
 }
 
 function completeTask(taskTitle){
     
     let task = createObject(findObject(taskTitle, 'task'));
     localStorage.removeItem(taskTitle); 
-    task.completed = true;
-    saveObject(task);
-    let taskHeader = document.getElementById(taskTitle).children[0].firstChild
-    taskHeader.classList.add('completed')
+    if(task)   {
+        task.completed = true;
+        saveObject(task);
+        let taskHeader = document.getElementById(taskTitle).children[0].firstChild
+        taskHeader.classList.add('completed')
 }
+}
+    
 
 function getTaskTitleFromForm() {
     return document.getElementById('task-title').value
@@ -167,8 +179,10 @@ function createNewTaskButton() {
 
 function closeExpandedTask(taskTitle) {
     localStorage.removeItem(taskTitle);    
-    let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
     let taskContainer = document.getElementById(taskTitle)
+    let originalTaskComplete = taskContainer.children[0].children[0].classList.contains('completed');
+    let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), originalTaskComplete, getTaskDescriptionFromForm());
+    saveObject(newTask);
     let previousPriority = taskContainer.classList[1];
     let taskCheckbox = taskContainer.previousElementSibling;
     taskContainer.classList.remove(previousPriority);
