@@ -57,6 +57,10 @@ body {
 
 .projects-list {
     display: flex;
+    flex-direction: column;
+    max-height: 20em;
+    overflow-y: auto;
+    overflow-x: hidden;
     
 }
 .navbar-project {
@@ -69,11 +73,11 @@ body {
     display: none;
 }
 
-.show {
+.projects-form.show {
     display: inline;
 }
 
-.hide {
+.projects-form.hide {
     display: none;
 }
 
@@ -207,10 +211,30 @@ input[type="checkbox"] {
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 50%;
   }
-  
-  /* The Close Button */
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-content input {
+    padding: 0.5em;
+    margin-bottom: 0.2em;
+    border-radius: 7px;
+  }
+
+  .modal-content input[type = text] {
+    color: white;
+    background-color: #3e8e41;
+  }
+
+  .datepriority-container {
+    display: flex;
+    justify-content: space-between;
+  }
+      /* The Close Button */
   .close {
     color: #aaaaaa;
     float: right;
@@ -226,6 +250,10 @@ input[type="checkbox"] {
     font-size: 1.5em;
     border: none;
     cursor: pointer;
+    font-size: 2em;
+    padding: 0 2em;    
+    border-radius: 5px;
+    margin: 00.2em;
   }
   
   /* The container <div> - needed to position the dropdown content */
@@ -244,11 +272,15 @@ input[type="checkbox"] {
     z-index: 1;
   }
 
-  .hide {
+  .dropbtn.hide {
+    opacity: 0;
+  }
+
+  .dropdown-content.hide {
     display: none;
   }
 
-  .show {
+  .dropdown-content.show {
     display: block;
   }
   
@@ -266,8 +298,20 @@ input[type="checkbox"] {
  
   
   /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+  .dropdown:hover .dropbtn.priority-1{
+    background-color: #9c3737b0;
+  }
+  
+  .dropdown:hover .dropbtn.priority-2{
+    background-color: #846c41c5;
+  }
+
+  .dropdown:hover .dropbtn.priority-3{
+    background-color: #15cb2483;
+  }
+
+  .dropdown:hover .dropbtn.priority-4{
+    background-color: #aaa4a4b0;
   }
 
   .hamburger-float {
@@ -296,6 +340,10 @@ input[type="checkbox"] {
         
     }    
     .hide-on-mobile {width: 0;}
+    .modal-content {
+       
+        width: 80%;
+      }
 }
 
 
