@@ -127,6 +127,7 @@ function checkStorageAvailable() {
             }
         })
         
+        allProjects.sort((a,b) => a.title.localeCompare(b.title));
         return allProjects
     }
 
