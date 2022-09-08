@@ -1,5 +1,5 @@
 import { addElement } from "./buildingblocks";
-import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton, deleteTaskButton } from "./formsAndButtons";
+import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton, deleteTaskButton, projectDropdownButton } from "./formsAndButtons";
 import { allTasks } from "./storage";
 import { buildExpandedTask } from "./displayTask"
 
@@ -44,6 +44,7 @@ function showTaskModal(taskTitle){
     closeExpandedTaskButton(taskTitle); 
     priorityDropDownButton();
     deleteTaskButton(taskTitle);
+    projectDropdownButton();
 }
 
 export {
