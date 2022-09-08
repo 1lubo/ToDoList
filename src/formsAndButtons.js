@@ -2,7 +2,7 @@ import { Project,validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject, removeProjectFromNavbar } from "./displayProject";
 import { addElement, removeContent } from "./buildingblocks";
 import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
-buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer } from "./displayTask";
+buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer, buildTaskProjectDropdown } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
@@ -32,6 +32,7 @@ function newTaskForm(){
     let dateAndPriority = addElement('div');
     dateAndPriority.classList.add('datepriority-container');
     dateAndPriority.appendChild(dueDate);
+    dateAndPriority.appendChild(buildTaskProjectDropdown('Inbox'))
     dateAndPriority.appendChild(priority);    
     //formElements.push(priority);
     let formButtons = addElement('div');
@@ -123,13 +124,13 @@ function getTaskPriority() {
 }
 
 function getProjectName() {
-    let projectName = document.getElementsByClassName('project-title')[0];
-    if (document.body.contains(projectName)) {
-        return projectName.innerText
-    } else {
-        return 'Inbox';
-    }
-    
+    //let projectName = document.getElementsByClassName('project-title')[0];
+    //if (document.body.contains(projectName)) {
+    //    return projectName.innerText
+    //} else {
+    //    return 'Inbox';
+    //}
+    return document.getElementsByClassName('dropbtn-projects')[0].innerHTML;
 }
 
 
@@ -146,6 +147,7 @@ function showNewTaskForm(){
     priorityDropDownButton();
     hideNewTaskFormButton();
     createNewTaskButton(); 
+    projectDropdownButton();
 
 }
 
@@ -168,9 +170,16 @@ function createNewTaskButton() {
     document.getElementById('add-task').addEventListener('click', function(){
         if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
             let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
-            addNewTaskToContainer(newTask);           
-            clearTaskForm();
-            hideNewTaskForm();
+            if(newTask.project == document.getElementsByClassName('project-title')[0].innerHTML){
+                addNewTaskToContainer(newTask);           
+                clearTaskForm();
+                hideNewTaskForm();
+            } else {
+                removeContent();
+                showProject(newTask.project);
+                taskLinks(); 
+            }
+            
         } else {
             alert(validateTaskName(getTaskTitleFromForm(), getProjectName()));
         }
@@ -178,6 +187,7 @@ function createNewTaskButton() {
 }
 
 function closeExpandedTask(taskTitle) {
+    let previousProject = createObject(findObject(taskTitle, 'task')).project
     localStorage.removeItem(taskTitle);    
     let taskContainer = document.getElementById(taskTitle)
     let originalTaskComplete = taskContainer.children[0].children[0].classList.contains('completed');
@@ -191,8 +201,18 @@ function closeExpandedTask(taskTitle) {
     taskCheckbox.classList.add(`priority-${getTaskPriority()}`);
     taskContainer.id = getTaskTitleFromForm();
     taskContainer.textContent = '';
-    buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
-    hideNewTaskForm();
+    //if(previousProject == newTask.project){
+    //    buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
+    //    hideNewTaskForm();
+    //} else {
+    //    removeContent();
+    //    showProject(newTask.project);
+    //    taskLinks();
+    //}
+    removeContent();
+    showProject(newTask.project);
+    taskLinks();
+       
     
 }
 
@@ -237,6 +257,32 @@ function priorityDropDownButton() {
         taskPrioritySettingButton();        
         showDropDown();
     });
+}
+
+function taskProjectSettingButton() {
+    Array.from(document.querySelector('.projects-dropdown-content').childNodes).forEach( button => button.addEventListener('click', (e)=> {
+        closeProjectDropDown(e.target.innerHTML);
+    }))
+}
+
+function projectDropdownButton() {
+    document.getElementsByClassName('dropbtn-projects')[0].addEventListener('click', () => {
+        taskProjectSettingButton();
+        showProjectDropDown();
+    })
+}
+
+function showProjectDropDown() {
+    document.getElementsByClassName('dropbtn-projects')[0].classList.remove('show');
+    document.getElementsByClassName('dropbtn-projects')[0].classList.add('hide');
+    document.getElementsByClassName('projects-dropdown-content')[0].classList.remove('hide');
+    document.getElementsByClassName('projects-dropdown-content')[0].classList.add('show');
+}
+
+function closeProjectDropDown(newProject) {
+    document.getElementsByClassName('dropbtn-projects')[0].innerHTML = newProject;
+    document.getElementsByClassName('dropbtn-projects')[0].classList.replace('hide', 'show')
+    document.getElementsByClassName('projects-dropdown-content')[0].classList.replace('show', 'hide')    
 }
 
 function showNewProjectForm(){    
@@ -381,5 +427,5 @@ function buttons() {
 
 export {
     buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
-    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton
+    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton
 }
