@@ -342,6 +342,56 @@ function deleteProjectButton(){
     })
 }
 
+function projectFilterButton(){
+    document.getElementsByClassName('dropbtn-filter')[0].addEventListener('click', ()=> {
+        showTasksFilterDropdown()
+        //document.getElementsByClassName('dropbtn-filter')[0].classList.add('open')
+        //if (document.body.contains(document.querySelector('.dropbtn-filter .open'))) {
+        //    cancelTaskFilterDropdownButton()
+        //}
+        
+    })
+}
+
+function showTasksFilterDropdown(){
+    if(document.getElementsByClassName('filter-dropdown-content')[0].classList.contains('hide')){
+        document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('hide', 'show');   
+    } else {
+        document.getElementsByClassName('filter-dropdown-content')[0].classList.add('show');
+    }
+    taskProjectFilterButton() 
+}
+
+function closeTaskFilterDropDown(filterName){
+    document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('show', 'hide');
+    document.getElementsByClassName('dropbtn-filter')[0].classList.remove('open')
+    let projectTitle = document.getElementsByClassName('project-title')[0].innerHTML;
+    removeContent();
+    
+    showProject(projectTitle, filterName)
+      
+    taskLinks();
+    completeTaskButtons();
+}
+
+function taskProjectFilterButton() {
+    Array.from(document.querySelector('.filter-dropdown-content').childNodes).forEach( button => button.addEventListener('click', (e)=> {
+        
+        closeTaskFilterDropDown(e.target.innerHTML);        
+    }))
+}
+
+//function cancelTaskFilterDropdown(){
+//    document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('show', 'hide');
+//    document.getElementsByClassName('dropbtn-filter')[0].classList.remove('open')
+//}
+//
+//function cancelTaskFilterDropdownButton(){
+//    document.getElementsByClassName('dropbtn-filter open')[0].addEventListener('click', ()=> {
+//        cancelTaskFilterDropdown()
+//    })
+//}
+
 function inbox() {
     document.getElementById('Inbox').parentElement.addEventListener('click', function(){
         removeContent();        
@@ -427,5 +477,5 @@ function buttons() {
 
 export {
     buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
-    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton
+    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton, projectFilterButton
 }
