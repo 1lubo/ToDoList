@@ -1,14 +1,14 @@
 import { addElement } from "./buildingblocks";
-import { createObject, allTasks, deleteObject } from "./storage";
+import { createObject, allTasks, deleteObject, allProjects } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
 const {format, add} = require('date-fns');
 import { newTaskModal, showTaskModal } from "./modal";
 
-function buildTaskHeader(title, project, completed, description){
+function buildTaskHeader(title, completed, description){
     let taskHeader = addElement('div');
     taskHeader.classList.add('task-header');    
-    let taskTitle = addElement('h2', title + ' ' +project);
+    let taskTitle = addElement('h2', title);
     taskTitle.classList.add('task-title'); 
     if (completed) {
         taskTitle.classList.add('completed');
@@ -55,8 +55,9 @@ function buildTaskFooter(dueDate){
 
 }
 
-function buildExpandedTaskFooter(dueDate, priority) {
+function buildExpandedTaskFooter(dueDate, priority, project) {
     //let taskFooter = []
+    
     let dateAndPriority = addElement('div');
     dateAndPriority.classList.add('datepriority-container');
     let taskDueDate = addElement('input');
@@ -67,14 +68,16 @@ function buildExpandedTaskFooter(dueDate, priority) {
     //taskFooter.push(taskDueDate);    
     //taskFooter.push(buildTaskPriorityDropdown(priority));
     dateAndPriority.appendChild(taskDueDate);
+    dateAndPriority.appendChild(buildTaskProjectDropdown(project));
     dateAndPriority.appendChild(buildTaskPriorityDropdown(priority))
     
     return dateAndPriority;
 }
 
 function buildTaskPriorityDropdown(priority=null){
+    
     let text = '';
-    switch (priority) {
+    switch (parseInt(priority)) {
         case 1:
             text = 'priority-1'
             break;
@@ -89,7 +92,7 @@ function buildTaskPriorityDropdown(priority=null){
     }
     let dropDown = addElement('div');
     dropDown.classList.add('dropdown');
-    let dropDownButton = addElement('div', `\u{2691}`);
+    let dropDownButton = addElement('div', `\u{2691}`);    
     dropDownButton.classList.add('dropbtn', text);
     let dropDownContent = addElement('div');
     dropDownContent.classList.add('dropdown-content');
@@ -116,6 +119,28 @@ function buildTaskPriorityDropdown(priority=null){
 
 }
 
+function buildTaskProjectDropdown(currentProject) {
+    let dropDown = addElement('div');
+    dropDown.classList.add('projects-dropdown');
+    let dropDownButton = addElement('div', currentProject);
+    dropDownButton.classList.add('dropbtn-projects');
+    let dropDownContent = addElement('div');
+    dropDownContent.classList.add('projects-dropdown-content');
+    allProjects().forEach( project => {
+        let projectName = addElement('div', project.title);
+        if (project.title == currentProject) {
+            projectName.innerText += `\u{2713}`
+        }
+        //let projectName = addElement('div', project.title);
+        dropDownContent.appendChild(projectName);
+    })
+
+    dropDown.appendChild(dropDownButton);
+    dropDown.appendChild(dropDownContent);
+
+    return dropDown
+}
+
 
 
 function buildTask(task) {
@@ -123,7 +148,7 @@ function buildTask(task) {
     let taskContainer = addElement('div');
     taskContainer.classList.add('task-details-container');
     taskContainer.classList.add(`priority-${task.priority}`);    
-    taskElements.push(buildTaskHeader(task.title, task.project ,task.completed, task.description));      
+    taskElements.push(buildTaskHeader(task.title, task.completed, task.description));      
     taskElements.push(buildTaskFooter(task.dueDate));
     taskElements.forEach( element => taskContainer.appendChild(element));
     taskContainer.id = task.title;    
@@ -161,7 +186,7 @@ function buildExpandedTask(task) {
     
     let taskElements = [];        
     let header = buildExpandedTaskHeader(task.title, task.description);
-    let footer = buildExpandedTaskFooter(task.dueDate, task.priority);
+    let footer = buildExpandedTaskFooter(task.dueDate, task.priority, task.project);
     taskElements.push(header[0], header[1]); 
     //taskElements.push(footer[0], footer[1]);
     taskElements.push(footer);
@@ -265,5 +290,5 @@ function showTask(taskTitle){
 
 export {
     buildTask, showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, buildTaskAfterEdit, buildExpandedTask, 
-    buildTaskPriorityDropdown, removeTaskContainer
+    buildTaskPriorityDropdown, removeTaskContainer, buildTaskProjectDropdown
 }
