@@ -1,8 +1,8 @@
 import { addElement } from "./buildingblocks";
 import { createObject, allTasks, deleteObject, allProjects } from "./storage";
-import { displayDateFormat, dateIsToday, isInFuture } from "./dateHelper";
+import { displayDateFormat, dateIsToday, isInFuture, isInPast } from "./dateHelper";
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
-const {format, add} = require('date-fns');
+const {format, add, parseISO} = require('date-fns');
 import { newTaskModal, showTaskModal } from "./modal";
 
 function buildTaskHeader(title, completed, description){
@@ -44,11 +44,18 @@ function buildExpandedTaskHeader(title, description){
 function buildTaskFooter(dueDate){
     let taskFooter = addElement('div');
     taskFooter.classList.add('task-footer'); 
-    dueDate ||= new Date();
+    dueDate ||= new Date();    
     let date = displayDateFormat(dueDate);
     let taskDueDate = addElement('div', date);
     let dateIcon = addElement('span');    
     taskDueDate.classList.add('task-date');
+    if (dateIsToday(dueDate)){
+        taskDueDate.classList.add('today')
+    } else if(isInFuture(dueDate)) {
+        taskDueDate.classList.add('future')
+    } else if (isInPast(dueDate)) {
+        taskDueDate.classList.add('past')
+    }
     taskFooter.appendChild(taskDueDate);
     
     return taskFooter;
@@ -62,7 +69,9 @@ function buildExpandedTaskFooter(dueDate, priority, project) {
     dateAndPriority.classList.add('datepriority-container');
     let taskDueDate = addElement('input');
     taskDueDate.setAttribute('type', 'date')
-    taskDueDate.value = dueDate;
+    console.log(format(parseISO(dueDate), 'M-d-y'))
+    taskDueDate.value = format(parseISO(dueDate), 'y-MM-dd');
+    
     taskDueDate.id = 'task-dueDate';
 
     //taskFooter.push(taskDueDate);    
