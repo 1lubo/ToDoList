@@ -1,4 +1,4 @@
-const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, isToday, isFuture} = require('date-fns');
+const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, isToday, isFuture, isPast} = require('date-fns');
 
 let today = new Date();
 
@@ -45,6 +45,12 @@ function isInFuture(date){
     return false
 }
 
+function isInPast(date){
+    date = parseISO(date)
+    
+    return isPast(date)
+}
 
 
-export { oneDayDifference, displayDateFormat, dateIsToday, isInFuture}
+
+export { oneDayDifference, displayDateFormat, dateIsToday, isInFuture, isInPast}
