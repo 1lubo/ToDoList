@@ -4,6 +4,7 @@ import { buildTask } from "./displayTask";
 import { deleteProjectButton, projectFilterButton } from "./formsAndButtons";
 
 
+
 function buildProject(projectString, filterName=null) {
     
     let project = createObject(projectString);
@@ -77,7 +78,7 @@ function showProject(projectTitle, filterName=null){
 function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
-    let dropDownButton = addElement('div', `\u{25BC}`);
+    let dropDownButton = addElement('div');
     dropDownButton.classList.add('dropbtn-filter');
     let dropDownContent = addElement('div');
     dropDownContent.classList.add('filter-dropdown-content');
