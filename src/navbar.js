@@ -3,16 +3,16 @@ import { addProjectToNavbar } from './displayProject';
 import { allProjects } from './storage';
 
 function addTaskButton() {
-    let addTaskButton = addElement('a', `\u{002B}`);
-    addTaskButton.classList.add('float')
+    let addTaskButton = addElement('a', 'task');
+    addTaskButton.classList.add('float', 'material-icons')
     addTaskButton.id = 'new-task';
     document.body.appendChild(addTaskButton);
     
 }
 
 function addNavHamburger() {
-    let hamburger = addElement('a', `\u{2630}`);
-    hamburger.classList.add('hamburger-float', 'menu-hidden');
+    let hamburger = addElement('a', 'menu_open');
+    hamburger.classList.add('material-icons', 'hamburger-float', 'menu-hidden');
     hamburger.id = 'responsive-menu';
     document.body.appendChild(hamburger);
 }
@@ -20,7 +20,7 @@ function addNavHamburger() {
 function createNavBar(){    
     let navBarContainer = addElement('div');
     navBarContainer.classList.add('navbar', 'hide-on-mobile');
-    let navbarLinks = [['Inbox', `\u{2709}`], ['Today', `\u{2605}`], ['Upcoming', `\u{226B}`]];
+    let navbarLinks = [['Inbox', 'all_inbox'], ['Today', 'star_rate'], ['Upcoming', 'schedule']];
     
     navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
     navBarContainer.appendChild(createProjectsSection());
@@ -32,6 +32,7 @@ function createNavBar(){
 function createNavLink(text, icon){
     let navLinkContainer = addElement('div');
     let navIcon = addElement('span', icon);
+    navIcon.classList.add('material-icons')
     let navLink = addElement('div', text);    
     navLink.id = text;
     navLinkContainer.appendChild(navLink);
@@ -46,7 +47,8 @@ function createProjectsSection(){
     let projectsHeader = addElement('div');
     projectsHeader.classList.add('projects-header');
     projectsHeader.appendChild(addElement('h4', 'Projects'));
-    let addProjectButton = addElement('span', `\u{2295}`);
+    let addProjectButton = addElement('span', 'library_add');
+    addProjectButton.classList.add('material-icons')
     addProjectButton.id = 'show-projects-form';
     projectsHeader.appendChild(addProjectButton);    
     projectsContainer.appendChild(projectsHeader);
