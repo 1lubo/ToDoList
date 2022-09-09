@@ -110,7 +110,7 @@ function getTaskDescriptionFromForm() {
 }
 
 function getTaskDueDateFromForm() {
-    let dueDate = document.getElementById('task-dueDate').value;
+    let dueDate = document.getElementById('task-dueDate').innerHTML;
     dueDate ||= new Date();
     return dueDate
 }
@@ -435,16 +435,42 @@ function showMenuButton() {
         if (classList.contains('menu-hidden')) {
             showMenu();
             button.classList.replace('menu-hidden', 'menu-shown')
-            button.innerHTML = `\u{2716}`
+            button.innerHTML = 'close';
         } else {
             hideMenu();
             button.classList.replace('menu-shown','menu-hidden')
-            button.innerHTML = `\u{2630}`
+            button.innerHTML = 'menu_open';
         }
     })
     
 }
 
+var eventHandler = function(e){e.preventDefault(); editDate(this);};
+
+
+function editDate(div){
+    let currentDate = div.innerText;
+    let datePicker = document.createElement('INPUT');
+    datePicker.setAttribute('type','date');    
+    datePicker.value = currentDate;
+
+    div.innerHTML = "";
+    div.append(datePicker);
+    datePicker.focus();
+    datePicker.addEventListener('focusout', function(e){
+        finishEditDate(div);
+    });
+
+    div.removeEventListener('click', eventHandler);
+ }
+
+ function finishEditDate(div){
+    //save data here
+
+    let newDate = div.querySelector('input').value;
+    div.innerText = newDate;
+    document.querySelector('.editable').addEventListener('click', eventHandler);
+ }
 
 function navbarLinks() {
    inbox();
@@ -477,5 +503,6 @@ function buttons() {
 
 export {
     buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
-    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton, projectFilterButton
+    priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton, projectFilterButton,
+    eventHandler
 }
