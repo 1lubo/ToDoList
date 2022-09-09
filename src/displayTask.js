@@ -46,8 +46,7 @@ function buildTaskFooter(dueDate){
     taskFooter.classList.add('task-footer'); 
     dueDate ||= new Date();    
     let date = displayDateFormat(dueDate);
-    let taskDueDate = addElement('div', date);
-    let dateIcon = addElement('span');    
+    let taskDueDate = addElement('div', date);    
     taskDueDate.classList.add('task-date');
     if (dateIsToday(dueDate)){
         taskDueDate.classList.add('today')
@@ -67,15 +66,21 @@ function buildExpandedTaskFooter(dueDate, priority, project) {
     
     let dateAndPriority = addElement('div');
     dateAndPriority.classList.add('datepriority-container');
-    let taskDueDate = addElement('input');
-    taskDueDate.setAttribute('type', 'date')
-    console.log(format(parseISO(dueDate), 'M-d-y'))
-    taskDueDate.value = format(parseISO(dueDate), 'y-MM-dd');
-    
+    //let taskDueDate = addElement('input');
+    //taskDueDate.setAttribute('type', 'date')    
+    //taskDueDate.value = format(parseISO(dueDate), 'y-MM-dd');
+    //taskDueDate.id = 'task-dueDate';
+    let taskDueDate = addElement('div');    
+    taskDueDate.innerText = format(parseISO(dueDate), 'y-MM-dd');
     taskDueDate.id = 'task-dueDate';
+    taskDueDate.classList.add('editable');
+    let dateIcon = addElement('span', 'event');
+    dateIcon.classList.add('material-icons') ;
+    dateIcon.id = 'open-date-picker';
 
     //taskFooter.push(taskDueDate);    
     //taskFooter.push(buildTaskPriorityDropdown(priority));
+    //taskDueDate.appendChild(dateIcon);
     dateAndPriority.appendChild(taskDueDate);
     dateAndPriority.appendChild(buildTaskProjectDropdown(project));
     dateAndPriority.appendChild(buildTaskPriorityDropdown(priority))
