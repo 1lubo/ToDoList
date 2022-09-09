@@ -36,8 +36,9 @@ function buildProject(projectString, filterName=null) {
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
-    let deleteProject = addElement('div', `\u{1F6AE}`)
+    let deleteProject = addElement('span', 'delete_forever')
     deleteProject.id = 'delete-project';
+    deleteProject.classList.add('material-icons');
 
     projectContainer.appendChild(projectTitle);
     projectTitle.appendChild(buildTaskfilterDropdown());
@@ -78,8 +79,11 @@ function showProject(projectTitle, filterName=null){
 function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
+    let filterIcon = addElement('span', 'sort')
+    filterIcon.classList.add('material-icons')
     let dropDownButton = addElement('div');
     dropDownButton.classList.add('dropbtn-filter');
+    dropDownButton.appendChild(filterIcon);
     let dropDownContent = addElement('div');
     dropDownContent.classList.add('filter-dropdown-content');
     ['Alphabetically', 'Due Date', 'Priority'].forEach( filter => {        
