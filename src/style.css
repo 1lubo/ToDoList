@@ -1,8 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
     height: 100vh;
     margin: 0;
-    
+    font-family: 'Roboto', sans-serif;
 }
 
 .navbar {
@@ -52,7 +53,20 @@ body {
 }
 
 .project-title {
-    margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    padding-top: 1em;
+}
+
+.project-title h1 {
+  padding-right: 1em;
+}
+
+.project-title div {
+  font-size: 1.3em;
+  font-weight: 400;
+  padding-right: 0.5em;
 }
 
 .projects-list {
@@ -257,17 +271,20 @@ input[type="checkbox"] {
     font-weight: bold;
   }
 
+  .dropbtn-filter {
+    font-size: 2em;
+    text-decoration: underline;
+    text-decoration-line: underline;
+  }
+
   /* Style The Dropdown Button */
-.dropbtn, .dropbtn-projects, .dropbtn-filter {
+.dropbtn, .dropbtn-projects, .dropbtn-filter , #delete-project{
     /*background-color: #4CAF50;
     padding: 16px;
     color: rgb(0, 0, 0);    */
     font-size: 1.5em;
     border: none;
-    cursor: pointer;
-    /*font-size: 2em;
-    padding: 0 2em;    
-    margin: 00.2em;*/
+    cursor: pointer;    
     border-radius: 5px;
     
   }

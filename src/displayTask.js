@@ -223,10 +223,10 @@ function showToday() {
     content.classList.add('content');
     let todayContainer = addElement('div');
     todayContainer.classList.add('project-container');
-    let header = addElement('h1', 'Today');
-    header.classList.add('project-title');
-    header.appendChild(addElement('span', `\u{269D}`));    
-    header.appendChild(addElement('div', format(new Date(),'MMM-do')));
+    let projectHeader = addElement('div');
+    projectHeader.classList.add('project-title');
+    projectHeader.appendChild(addElement('h1', 'Today'))    
+    projectHeader.appendChild(addElement('div', `(${format(new Date(),'MMM-do')})`));
     
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
@@ -236,7 +236,7 @@ function showToday() {
         }
     })
 
-    todayContainer.appendChild(header);
+    todayContainer.appendChild(projectHeader);
     todayContainer.appendChild(tasksContainer);
     content.appendChild(todayContainer);
 
@@ -250,15 +250,16 @@ function showUpcoming() {
     tasksContainer.classList.add('project-tasks');
     let upcomingContainer = addElement('div');
     upcomingContainer.classList.add('project-container');
-    let header = addElement('h1', 'Upcoming');    
-    header.classList.add('project-title');
+    let projectHeader = addElement('div');    
+    projectHeader.classList.add('project-title');
+    projectHeader.appendChild(addElement('h1', 'Upcoming'));
     allTasks().forEach(function(task){
         if(isInFuture(task.dueDate)) {
             tasksContainer.appendChild(buildTask(task))
         }
     })
 
-    upcomingContainer.appendChild(header);
+    upcomingContainer.appendChild(projectHeader);
     upcomingContainer.appendChild(tasksContainer);
     content.appendChild(upcomingContainer);    
 

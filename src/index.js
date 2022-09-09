@@ -1,41 +1,55 @@
 import { createNavBar } from "./navbar";
 import { saveObject } from "./storage";
-import { Project } from "./project";
+import { createProject } from "./project";
 import { Task } from "./task";
-import { buildTask } from "./displayTask";
-import { buildProject } from "./displayProject";
+import { buttons } from "./formsAndButtons";
+import { showInbox } from "./displayTask";
+import { taskLinks } from "./formsAndButtons";
 import './style.css';
+import { showProject } from "./displayProject";
+
+const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, parseJSON} = require('date-fns');
 
 
-//window.addEventListener('onload', alert(checkStorageAvailable()));
-createNavBar();
+localStorage.clear();
 
-var proj = new Project('default');
+function random_item(items)
+{
+  
+return items[Math.floor(Math.random()*items.length)];
+     
+}
 
-saveObject(proj);
 
+var proj1 = createProject('Inbox');
+//proj.getTasks();
+//saveObject(proj)
+//proj1.getTasks();
+saveObject(proj1)
+var projects = [];
+
+for (let i = 1; i < 4; i++) {
+    let proj = createProject(`Project - ${i}`)
+    saveObject(proj);
+    projects.push(proj.title);
+}
+
+
+let completeness = [true, false];
+let descriptions = ['Interesting', 'Long long long very very long description', null]
 
 
 for (let i = 1; i < 11; i++){    
-    var task = new Task(`task${i}`, 'default', addDays(new Date(),Math.floor(Math.random() * 10)), Math.floor(Math.random() * (4 - 1) + 1));
+    var task = new Task(`${String.fromCharCode(97 + i)}task`, random_item(projects) , addDays(new Date(),Math.floor(Math.random() * 10)), Math.floor(Math.random() * (4 - 1) + 1), random_item(completeness), random_item(descriptions));
     saveObject(task);
 }
 
 
 
-//var loadTask = findObject('default', 'project');
 
+createNavBar();
 
-var content = document.createElement('div');
-content.classList.add('content');
-//content.appendChild(buildProject(loadTask));
-Object.keys(localStorage).forEach(function(key){
-    if(localStorage.getItem(key).includes(`"type":"task"`)){
-        content.appendChild(buildTask(localStorage.getItem(key)))
-    }
-})
+showProject('Inbox')
+taskLinks()
 
-
-document.body.appendChild(content);
-
-
+buttons()

@@ -29,19 +29,20 @@ function buildProject(projectString, filterName=null) {
     
     let projectContainer = addElement('div');
     projectContainer.classList.add('project-container');
-    let projectTitle = addElement('h1', project.title);
+    let projectTitle = addElement('div');
     projectTitle.classList.add('project-title');
+    projectTitle.appendChild(addElement('h1', project.title))
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
-    let deleteProject = addElement('button', 'Delete')
+    let deleteProject = addElement('div', `\u{1F6AE}`)
     deleteProject.id = 'delete-project';
 
     projectContainer.appendChild(projectTitle);
-    projectContainer.appendChild(buildTaskfilterDropdown());
+    projectTitle.appendChild(buildTaskfilterDropdown());
     
     if(project.title != 'Inbox'){
-        projectContainer.appendChild(deleteProject);
+        projectTitle.appendChild(deleteProject);
         
     }
     projectContainer.appendChild(tasksContainer);
@@ -76,7 +77,7 @@ function showProject(projectTitle, filterName=null){
 function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
-    let dropDownButton = addElement('div', `\u{1F39B}`);
+    let dropDownButton = addElement('div', `\u{25BC}`);
     dropDownButton.classList.add('dropbtn-filter');
     let dropDownContent = addElement('div');
     dropDownContent.classList.add('filter-dropdown-content');
