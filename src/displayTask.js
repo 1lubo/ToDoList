@@ -62,30 +62,26 @@ function buildTaskFooter(dueDate){
 }
 
 function buildExpandedTaskFooter(dueDate, priority, project) {
-    //let taskFooter = []
-    
-    let dateAndPriority = addElement('div');
-    dateAndPriority.classList.add('datepriority-container');
-    //let taskDueDate = addElement('input');
-    //taskDueDate.setAttribute('type', 'date')    
-    //taskDueDate.value = format(parseISO(dueDate), 'y-MM-dd');
-    //taskDueDate.id = 'task-dueDate';
+        
+    let dateProjectPriority = addElement('div');
+    dateProjectPriority.classList.add('datepriority-container');    
     let taskDueDate = addElement('div');    
     taskDueDate.innerText = format(parseISO(dueDate), 'y-MM-dd');
     taskDueDate.id = 'task-dueDate';
-    taskDueDate.classList.add('editable');
+    taskDueDate.classList.add('editable', 'duedate');
     let dateIcon = addElement('span', 'event');
     dateIcon.classList.add('material-icons') ;
     dateIcon.id = 'open-date-picker';
 
-    //taskFooter.push(taskDueDate);    
-    //taskFooter.push(buildTaskPriorityDropdown(priority));
-    //taskDueDate.appendChild(dateIcon);
-    dateAndPriority.appendChild(taskDueDate);
-    dateAndPriority.appendChild(buildTaskProjectDropdown(project));
-    dateAndPriority.appendChild(buildTaskPriorityDropdown(priority))
+    dateProjectPriority.appendChild(taskDueDate);
+    let projectPriorityContainer = addElement('div');
+    projectPriorityContainer.classList.add('project-priority')
+    projectPriorityContainer.appendChild(buildTaskProjectDropdown(project));
+    projectPriorityContainer.appendChild(buildTaskPriorityDropdown(priority));
+    dateProjectPriority.appendChild(projectPriorityContainer);
     
-    return dateAndPriority;
+    
+    return dateProjectPriority;
 }
 
 function buildTaskPriorityDropdown(priority=null){
@@ -93,21 +89,21 @@ function buildTaskPriorityDropdown(priority=null){
     let text = '';
     switch (parseInt(priority)) {
         case 1:
-            text = 'priority-1'
+            text = 'red'
             break;
         case 2:
-            text = 'priority-2'
+            text = 'yellow'
             break;
         case 3:
-            text = 'priority-3'
+            text = 'green'
             break;
         default:
-            text = 'priority-4'
+            text = 'gray'
     }
     let dropDown = addElement('div');
     dropDown.classList.add('dropdown');
-    let dropDownButton = addElement('div', `\u{2691}`);    
-    dropDownButton.classList.add('dropbtn', text);
+    let dropDownButton = addElement('div', 'outlined_flag');    
+    dropDownButton.classList.add('dropbtn', 'material-icons', 'md-36', text);
     let dropDownContent = addElement('div');
     dropDownContent.classList.add('dropdown-content');
     let high = addElement('div', 'Priority 1 - High');
@@ -143,7 +139,9 @@ function buildTaskProjectDropdown(currentProject) {
     allProjects().forEach( project => {
         let projectName = addElement('div', project.title);
         if (project.title == currentProject) {
-            projectName.innerText += `\u{2713}`
+            let checkmark = addElement('span', 'done');
+            checkmark.classList.add('material-icons', 'md-18');
+            projectName.appendChild(checkmark);
         }
         //let projectName = addElement('div', project.title);
         dropDownContent.appendChild(projectName);
@@ -229,9 +227,12 @@ function showToday() {
     let todayContainer = addElement('div');
     todayContainer.classList.add('project-container');
     let projectHeader = addElement('div');
-    projectHeader.classList.add('project-title');
-    projectHeader.appendChild(addElement('h1', 'Today'))    
-    projectHeader.appendChild(addElement('div', `(${format(new Date(),'MMM-do')})`));
+    projectHeader.classList.add('project-title', 'tooltip');
+    projectHeader.appendChild(addElement('h1', 'Today')) 
+    let tooltipText = addElement('span',  `${format(new Date(),'MMMM-do')}`);
+    tooltipText.classList.add('tooltiptext');
+    projectHeader.appendChild(tooltipText);
+    //projectHeader.appendChild(addElement('div', `(${format(new Date(),'MMM-do')})`));
     
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');

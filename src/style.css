@@ -1,10 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+
+.material-icons.red { color: #fb000d; }
+.material-icons.green { color: #02b440; }
+.material-icons.yellow { color: #f7fb00; }
+.material-icons.gray { color: #5a5858; }
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
 body {
     height: 100vh;
     margin: 0;
     font-family: 'Roboto', sans-serif;
+}
+
+.tooltip{
+  position: relative;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 10em;
+  background-color: rgba(0, 0, 0, 0.371);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.5em 0;
+
+  position: absolute;
+  z-index: 1;
+  top: 85%;
+  
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 
 .navbar {
@@ -39,6 +72,12 @@ body {
     background-color: #a3b6c796;
 }
 
+.project-tasks {
+  display: flex;
+  flex-direction: column;
+
+}
+
 .projects-header, .navbarlink {
     display: flex;
     justify-content: space-around;
@@ -56,18 +95,22 @@ body {
 .project-title {
     display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     padding-top: 1em;
 }
 
 .project-title h1 {
-  padding-right: 1em;
+  padding: 0 1em;  
 }
 
-.project-title div {
-  font-size: 1.3em;
-  font-weight: 400;
-  padding-right: 0.5em;
+.project-title span, .modal-form-header span {
+  cursor: pointer;
+}
+
+.project-title span:hover, .modal-form-header span:hover {
+  border-radius: 5px;
+  /*border: 2px solid rgb(20, 10, 30);*/
+  box-shadow: 2px 2px 2px black;
 }
 
 .projects-list {
@@ -103,7 +146,7 @@ body {
 }
 
 .priority-2 {
-    border: 0.25em solid orange;
+    border: 0.25em solid rgb(255, 200, 0);
     color: orange;
 }
 
@@ -159,18 +202,29 @@ body {
 
 }
 
+.task-details-container .task-footer {
+  display: flex;
+}
+
+.task-date {
+  font-weight: bold;
+  text-align: center;
+  padding: 0 0.5em;
+  border-radius: 5px;
+}
+
 .task-date.future {
-  background-color: #888;
+  background-color: #bbb3b385;
 }
 
 .task-date.past {
   color: red;
-  background-color: rgba(131, 29, 29, 0.656);
+  background-color: #f99b9b61;
 }
 
 .task-date.today {
-  background-color: rgba(149, 128, 8, 0.566);
-  color: gold;
+  background-color: #fff14c90;
+  color: goldenrod;
 }
 
 
@@ -232,16 +286,24 @@ input[type="checkbox"] {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.75); /* Black w/ opacity */
   }
   
   /* Modal Content */
   .modal-content {
-    background-color: #fefefe;
+    background-color: #2d3849;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    border-radius: 6px;
+    width: 30%;
+    color: #fff;
+  }
+
+  .modal-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
   .modal-form {
@@ -249,20 +311,86 @@ input[type="checkbox"] {
     flex-direction: column;
   }
 
-  .modal-content input {
-    padding: 0.5em;
-    margin-bottom: 0.2em;
+  .modal-content input, .duedate {
+    /*-webkit-appearance: none;
+    appearance: none; */
+    border: none;
+    padding: 0.8em;
+    margin-bottom: 0.5em;
     border-radius: 7px;
+    color: white;
+    background-color: #759ba4;
+  } 
+
+  .modal-content button {  
+    cursor: pointer;  
+    border: none;
+    color: white;
+    padding: /*15px 32px*/ 0.6em 1.4em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9em;
+    border-radius: 7px;
+    transition-duration: 0.4s;
+    font-weight: 500;
   }
 
-  .modal-content input[type = text] {
+  .modal-content button#close-expanded-task:hover, .modal-content button#add-task:hover {
+    background-color: #02b440;
     color: white;
-    background-color: #3e8e41;
+   
+  }
+
+  .modal-content button#cancel-task-form:hover  {
+    background-color: #c01a1a;
+    color: white;
+    
+  }
+
+  .modal-content button#close-expanded-task, .modal-content button#add-task {
+    color: black;
+    background-color: #639d87;
+    border: 2px solid #02b440;
+  }
+
+  .modal-content button#cancel-task-form {
+    color: black;
+    background-color: #b17b7b;
+    border: 2px solid #c01a1a;
+  }
+
+  input[type=text] {
+    
+    transition: padding 1s, font-size 1s;
+  }
+
+  input[type=text]:focus {
+    background-color: #050505;
+    font-size: larger;
+    padding: 1.5em;
+    border: none;
+    
+  }
+
+  input[type=text]::placeholder {
+    color: #fafefed7;
   }
 
   .datepriority-container {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    
+  }
+
+  .datepriority-container .duedate {
+    text-align: center;
+    /*box-shadow: 2px 2px 2px rgb(202, 202, 202);*/
+  }
+
+  .project-priority {
+    display: flex;
+    justify-content: space-around;
   }
       /* The Close Button */
   .close {
@@ -279,7 +407,7 @@ input[type="checkbox"] {
   }
 
   /* Style The Dropdown Button */
-.dropbtn, .dropbtn-projects, .dropbtn-filter , #delete-project{
+.dropbtn, .dropbtn-projects, .dropbtn-filter {
     /*background-color: #4CAF50;
     padding: 16px;
     color: rgb(0, 0, 0);    */

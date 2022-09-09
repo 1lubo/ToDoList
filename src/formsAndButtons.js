@@ -11,6 +11,7 @@ function newTaskForm(){
     let formElements = [];
     let modalContent = addElement('div');
     modalContent.classList.add('modal-content');
+    modalContent.appendChild(addElement('h1', 'Add Task'))
     let formContainer = addElement('div');
     formContainer.classList.add('modal-form');    
     let title = addElement('input');
@@ -116,11 +117,42 @@ function getTaskDueDateFromForm() {
 }
 
 function getTaskPriority() {
-    
-    if (document.getElementsByClassName('dropbtn')[0].classList.length < 3) {
-        return document.getElementsByClassName('dropbtn')[0].classList[1].slice(-1);
+    let priorityNumber = '';
+    let newPriority = ''
+    if (document.getElementsByClassName('dropbtn')[0].classList.length < 5) {
+        newPriority = document.getElementsByClassName('dropbtn')[0].classList[3];
+        switch (newPriority) {
+            case 'red':
+                priorityNumber = '1'
+                break;
+            case 'yellow':
+                priorityNumber = '2'
+                break;
+            case 'green':
+                priorityNumber = '3'
+                break;
+            default:
+                priorityNumber = '4'
+        }
+        return priorityNumber
     } 
-    return document.getElementsByClassName('dropbtn')[0].classList[2].slice(-1);
+    newPriority =  document.getElementsByClassName('dropbtn')[0].classList[4];
+
+    switch (newPriority) {
+        case 'red':
+            priorityNumber = '1'
+            break;
+        case 'yellow':
+            priorityNumber = '2'
+            break;
+        case 'green':
+            priorityNumber = '3'
+            break;
+        default:
+            priorityNumber = '4'
+    }
+    return priorityNumber
+
 }
 
 function getProjectName() {
@@ -230,9 +262,9 @@ function deleteTaskButton(taskTitle){
 }
 
 function closeDropdown(priority){    
-    let previousPriority =  document.getElementsByClassName('dropbtn')[0].classList[1];
+    let previousPriority =  document.getElementsByClassName('dropbtn')[0].classList[3];    
     document.getElementsByClassName('dropbtn')[0].classList.remove('hide', previousPriority);
-    document.getElementsByClassName('dropbtn')[0].classList.add('show', `priority-${priority}`);
+    document.getElementsByClassName('dropbtn')[0].classList.add('show', priority);
     document.getElementsByClassName('dropdown-content')[0].classList.remove('show')
     document.getElementsByClassName('dropdown-content')[0].classList.add('hide');
 }
@@ -245,8 +277,25 @@ function showDropDown(){
 }
 
 function taskPrioritySettingButton() {
-    Array.from(document.querySelector('.dropdown-content').childNodes).forEach(button => button.addEventListener('click', event =>{        
-        closeDropdown(event.target.id);
+    Array.from(document.querySelector('.dropdown-content').childNodes).forEach(button => button.addEventListener('click', event =>{  
+    let selection = event.target.id; 
+    
+    let text = '';    
+    switch (parseInt(selection)){
+        case 1:
+            text = 'red'
+            break;
+        case 2:
+            text = 'yellow'
+            break;
+        case 3:
+            text = 'green'
+            break;
+        default:
+            text = 'gray'
+    }
+    
+        closeDropdown(text);
     }));
     
     
@@ -261,7 +310,7 @@ function priorityDropDownButton() {
 
 function taskProjectSettingButton() {
     Array.from(document.querySelector('.projects-dropdown-content').childNodes).forEach( button => button.addEventListener('click', (e)=> {
-        closeProjectDropDown(e.target.innerHTML);
+        closeProjectDropDown(e.target.firstChild.data);
     }))
 }
 
@@ -365,9 +414,8 @@ function showTasksFilterDropdown(){
 function closeTaskFilterDropDown(filterName){
     document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('show', 'hide');
     document.getElementsByClassName('dropbtn-filter')[0].classList.remove('open')
-    let projectTitle = document.getElementsByClassName('project-title')[0].innerHTML;
-    removeContent();
-    
+    let projectTitle = document.getElementsByClassName('project-title')[0].children[1].innerHTML;    
+    removeContent();    
     showProject(projectTitle, filterName)
       
     taskLinks();

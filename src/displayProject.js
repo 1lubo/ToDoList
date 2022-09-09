@@ -8,6 +8,7 @@ import { deleteProjectButton, projectFilterButton } from "./formsAndButtons";
 function buildProject(projectString, filterName=null) {
     
     let project = createObject(projectString);
+    
     project.getTasks();  
     
     switch (filterName) {
@@ -32,16 +33,18 @@ function buildProject(projectString, filterName=null) {
     projectContainer.classList.add('project-container');
     let projectTitle = addElement('div');
     projectTitle.classList.add('project-title');
-    projectTitle.appendChild(addElement('h1', project.title))
+    
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
     let deleteProject = addElement('span', 'delete_forever')
     deleteProject.id = 'delete-project';
-    deleteProject.classList.add('material-icons');
+    deleteProject.classList.add('material-icons', 'md-36', 'red');
 
-    projectContainer.appendChild(projectTitle);
     projectTitle.appendChild(buildTaskfilterDropdown());
+    projectTitle.appendChild(addElement('h1', project.title))
+    projectContainer.appendChild(projectTitle);
+    
     
     if(project.title != 'Inbox'){
         projectTitle.appendChild(deleteProject);
@@ -80,7 +83,7 @@ function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
     let filterIcon = addElement('span', 'sort')
-    filterIcon.classList.add('material-icons')
+    filterIcon.classList.add('material-icons', 'md-36')
     let dropDownButton = addElement('div');
     dropDownButton.classList.add('dropbtn-filter');
     dropDownButton.appendChild(filterIcon);
