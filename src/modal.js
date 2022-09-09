@@ -1,7 +1,8 @@
 import { addElement } from "./buildingblocks";
-import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton, deleteTaskButton, projectDropdownButton } from "./formsAndButtons";
+import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton, deleteTaskButton, projectDropdownButton, eventHandler } from "./formsAndButtons";
 import { allTasks } from "./storage";
 import { buildExpandedTask } from "./displayTask"
+
 
 function newTaskModal(){
     let modal = addElement('div');
@@ -45,6 +46,8 @@ function showTaskModal(taskTitle){
     priorityDropDownButton();
     deleteTaskButton(taskTitle);
     projectDropdownButton();
+    //var eventHandler = function(e){e.preventDefault(); editDate(this);};
+    document.querySelector('.editable').addEventListener('click', eventHandler)
 }
 
 export {
