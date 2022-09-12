@@ -7,6 +7,7 @@ import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
 import { createNavBar } from "./navbar";
+import Icon from './memory.svg'
 
 
 /* build a form for adding a new task*/
@@ -551,7 +552,18 @@ function buttons() {
     })
 }
 
+function setFavicons(favImg){
+    let headTitle = document.querySelector('head');
+    let setFavicon = document.createElement('link');
+    setFavicon.setAttribute('rel','shortcut icon');
+    setFavicon.setAttribute('href',favImg);
+    headTitle.appendChild(setFavicon);
+}
+
+
 function start() {
+    setFavicons(Icon);
+
     saveObject(createProject('Inbox'));    
     createTask('Welcome to ...', 'Inbox', null, 1, false, 'Forget-Me-Not');
     createTask('Add a task ...', 'Inbox', null, 2, false, 'by clicking on the button in the lower right-hand corner');
