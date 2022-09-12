@@ -34,9 +34,19 @@ function buildProject(projectString, filterName=null) {
     let projectTitle = addElement('div');
     projectTitle.classList.add('project-title');
     
-    let tasksContainer = addElement('div');
-    tasksContainer.classList.add('project-tasks');
-    project.tasks.forEach(task => tasksContainer.appendChild(buildTask(task)));
+    let activeTasksContainer = addElement('div');
+    activeTasksContainer.classList.add('project-tasks');
+    let completedTasksContainer = addElement('div');
+    completedTasksContainer.classList.add('project-tasks', 'completed');
+
+    project.tasks.forEach(task => {
+        if(task.completed == false){
+            activeTasksContainer.appendChild(buildTask(task))
+        } else {
+            completedTasksContainer.appendChild(buildTask(task));
+        }
+        });
+
     let deleteProject = addElement('span', 'delete_forever')
     deleteProject.id = 'delete-project';
     deleteProject.classList.add('material-icons', 'md-36', 'red');
@@ -50,7 +60,8 @@ function buildProject(projectString, filterName=null) {
         projectTitle.appendChild(deleteProject);
         
     }
-    projectContainer.appendChild(tasksContainer);
+    projectContainer.appendChild(activeTasksContainer);
+    projectContainer.appendChild(completedTasksContainer);
     
     return projectContainer;
 
