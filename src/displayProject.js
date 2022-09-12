@@ -2,6 +2,7 @@ import { addElement } from "./buildingblocks";
 import { findObject, createObject } from "./storage";
 import { buildTask } from "./displayTask";
 import { deleteProjectButton, projectFilterButton, showCompletedEventHandler, hideCompletedEventHandler } from "./formsAndButtons";
+import { setActive } from "./navbar";
 
 
 
@@ -52,11 +53,11 @@ function buildProject(projectString, filterName=null, showCompletedTask=false) {
         }
         });
 
-    let deleteProject = addElement('div', 'delete_forever')
+    let deleteProject = addElement('span', 'delete_forever')
     deleteProject.id = 'delete-project';
     deleteProject.classList.add('material-icons', 'md-36', 'red');
 
-    let showCompleted = addElement('div');
+    let showCompleted = addElement('span');
     showCompleted.classList.add('material-icons', 'md-36')
     if(showCompletedTask) {
         showCompleted.id = 'hide-completed';
@@ -98,7 +99,7 @@ function removeProjectFromNavbar(projectTitle) {
 }
 
 function showProject(projectTitle, filterName=null, showCompletedTask=false){
-    
+    setActive(projectTitle);
     document.body.appendChild(addElement('div')).classList.add('content');
     const root = document.getElementsByClassName('content')[0];
     root.appendChild(buildProject(findObject(projectTitle, 'project'), filterName, showCompletedTask));
@@ -118,7 +119,7 @@ function showProject(projectTitle, filterName=null, showCompletedTask=false){
 function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
-    let filterIcon = addElement('div', 'sort')
+    let filterIcon = addElement('span', 'sort')
     filterIcon.classList.add('material-icons', 'md-36')
     let dropDownButton = addElement('div');
     dropDownButton.classList.add('dropbtn-filter');

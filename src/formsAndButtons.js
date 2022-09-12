@@ -6,6 +6,7 @@ buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer, buildTaskPro
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
+import { setActive } from "./navbar";
 
 function newTaskForm(){
     let formElements = [];
@@ -385,7 +386,7 @@ function deleteProjectButton(){
         deleteProjectTasks(projectTitle);
         deleteObject(projectTitle, 'project')
         removeContent();        
-        showProject('Inbox')
+        showProject('Inbox')        
         taskLinks();
         completeTaskButtons();        
     })

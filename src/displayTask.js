@@ -4,6 +4,7 @@ import { displayDateFormat, dateIsToday, isInFuture, isInPast } from "./dateHelp
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
 const {format, add, parseISO} = require('date-fns');
 import { newTaskModal, showTaskModal } from "./modal";
+import { setActive } from "./navbar";
 
 function buildTaskHeader(title, completed, description){
     let taskHeader = addElement('div');
@@ -222,6 +223,7 @@ function showInbox() {
 }
 
 function showToday() {
+    setActive('Today');
     let content = document.createElement('div');
     content.classList.add('content');
     let todayContainer = addElement('div');
@@ -250,6 +252,7 @@ function showToday() {
 }
 
 function showUpcoming() {
+    setActive('Upcoming');
     let content = document.createElement('div');
     content.classList.add('content');
     let tasksContainer = addElement('div');

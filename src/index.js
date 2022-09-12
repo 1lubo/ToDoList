@@ -1,4 +1,4 @@
-import { createNavBar } from "./navbar";
+import { createNavBar, setActive } from "./navbar";
 import { saveObject } from "./storage";
 import { createProject } from "./project";
 import { Task } from "./task";
@@ -29,7 +29,7 @@ saveObject(proj1)
 var projects = [];
 
 for (let i = 1; i < 4; i++) {
-    let proj = createProject(`Project - ${i}`)
+    let proj = createProject(`Project-${i}`)
     saveObject(proj);
     projects.push(proj.title);
 }

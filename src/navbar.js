@@ -36,7 +36,7 @@ function createNavLink(text, icon){
     let navLink = addElement('div', text);    
     navLink.id = text;
     navLinkContainer.appendChild(navLink);
-    navLinkContainer.appendChild(navIcon);
+    navLinkContainer.appendChild(navIcon);    
     navLinkContainer.classList.add('navbarlink');
     return navLinkContainer;
 }
@@ -97,6 +97,20 @@ function newProjectForm(){
     return formContainer;
 }
 
+function setActive(project) {
+    let navbar = document.querySelector('.navbar');
+    if(navbar.contains(document.querySelector('.active'))) {
+        navbar.querySelector('.active').classList.remove('active');
+    }    
+    
+    if(navbar.querySelector(`#${project}`).classList.contains('navbar-project')){
+        navbar.querySelector(`#${project}`).classList.add('active');    
+    } else {
+        navbar.querySelector(`#${project}`).parentNode.classList.add('active');
+    }
+    
+}
+
 export {
-    createNavBar
+    createNavBar, setActive
 }
