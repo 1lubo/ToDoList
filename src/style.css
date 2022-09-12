@@ -78,6 +78,14 @@ body {
 
 }
 
+.project-tasks.completed.hide {
+  visibility: hidden;
+}
+
+.project-tasks.completed.show {
+  visibility: visible;
+}
+
 .projects-header, .navbarlink {
     display: flex;
     justify-content: space-around;
@@ -101,6 +109,10 @@ body {
 
 .project-title h1 {
   padding: 0 1em;  
+}
+
+.project-title div {
+  padding: 0 0.1em;
 }
 
 .project-title span, .modal-form-header span {

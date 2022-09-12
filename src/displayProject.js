@@ -1,11 +1,11 @@
 import { addElement } from "./buildingblocks";
 import { findObject, createObject } from "./storage";
 import { buildTask } from "./displayTask";
-import { deleteProjectButton, projectFilterButton } from "./formsAndButtons";
+import { deleteProjectButton, projectFilterButton, showCompletedEventHandler, hideCompletedEventHandler } from "./formsAndButtons";
 
 
 
-function buildProject(projectString, filterName=null) {
+function buildProject(projectString, filterName=null, showCompletedTask=false) {
     
     let project = createObject(projectString);
     
@@ -38,6 +38,11 @@ function buildProject(projectString, filterName=null) {
     activeTasksContainer.classList.add('project-tasks');
     let completedTasksContainer = addElement('div');
     completedTasksContainer.classList.add('project-tasks', 'completed');
+    if (showCompletedTask) {
+        completedTasksContainer.classList.add('show')
+    } else {
+        completedTasksContainer.classList.add('hide')
+    }
 
     project.tasks.forEach(task => {
         if(task.completed == false){
@@ -47,10 +52,23 @@ function buildProject(projectString, filterName=null) {
         }
         });
 
-    let deleteProject = addElement('span', 'delete_forever')
+    let deleteProject = addElement('div', 'delete_forever')
     deleteProject.id = 'delete-project';
     deleteProject.classList.add('material-icons', 'md-36', 'red');
 
+    let showCompleted = addElement('div');
+    showCompleted.classList.add('material-icons', 'md-36')
+    if(showCompletedTask) {
+        showCompleted.id = 'hide-completed';
+        showCompleted.innerText = 'visibility_off'
+    } else {
+        showCompleted.id = 'show-completed';
+        showCompleted.innerText = 'visibility'
+    }
+    
+    
+
+    projectTitle.appendChild(showCompleted);
     projectTitle.appendChild(buildTaskfilterDropdown());
     projectTitle.appendChild(addElement('h1', project.title))
     projectContainer.appendChild(projectTitle);
@@ -59,7 +77,7 @@ function buildProject(projectString, filterName=null) {
     if(project.title != 'Inbox'){
         projectTitle.appendChild(deleteProject);
         
-    }
+    }    
     projectContainer.appendChild(activeTasksContainer);
     projectContainer.appendChild(completedTasksContainer);
     
@@ -79,21 +97,28 @@ function removeProjectFromNavbar(projectTitle) {
     document.querySelector('.projects-list').children[projectTitle].remove()
 }
 
-function showProject(projectTitle, filterName=null){
+function showProject(projectTitle, filterName=null, showCompletedTask=false){
     
     document.body.appendChild(addElement('div')).classList.add('content');
     const root = document.getElementsByClassName('content')[0];
-    root.appendChild(buildProject(findObject(projectTitle, 'project'), filterName));
+    root.appendChild(buildProject(findObject(projectTitle, 'project'), filterName, showCompletedTask));
     if(projectTitle != 'Inbox'){        
         deleteProjectButton()
     }
     projectFilterButton()
+    if (showCompletedTask) {
+        document.querySelector('#hide-completed').addEventListener('click',hideCompletedEventHandler);
+    } else {
+        document.querySelector('#show-completed').addEventListener('click',showCompletedEventHandler);
+        
+    }
+    
 }
 
 function buildTaskfilterDropdown() {
     let dropDown = addElement('div');
     dropDown.classList.add('filter-dropdown');
-    let filterIcon = addElement('span', 'sort')
+    let filterIcon = addElement('div', 'sort')
     filterIcon.classList.add('material-icons', 'md-36')
     let dropDownButton = addElement('div');
     dropDownButton.classList.add('dropbtn-filter');

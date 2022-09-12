@@ -198,7 +198,7 @@ function hideNewTaskFormButton(){
     document.getElementById('cancel-task-form').addEventListener('click', function(){hideNewTaskForm()})
 }
 
-function createNewTaskButton() {
+function createNewTaskButton() {    
     document.getElementById('add-task').addEventListener('click', function(){
         if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
             let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
@@ -232,7 +232,7 @@ function closeExpandedTask(taskTitle) {
     taskContainer.classList.add(`priority-${getTaskPriority()}`)
     taskCheckbox.classList.add(`priority-${getTaskPriority()}`);
     taskContainer.id = getTaskTitleFromForm();
-    taskContainer.textContent = '';
+    taskContainer.textContent = '';    
     //if(previousProject == newTask.project){
     //    buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
     //    hideNewTaskForm();
@@ -519,6 +519,27 @@ function editDate(div){
     document.querySelector('.editable').addEventListener('click', eventHandler);
  }
 
+ var showCompletedEventHandler = function(e){e.preventDefault(); showCompleted(this);};
+ var hideCompletedEventHandler = function(e){e.preventDefault(); hideCompleted(this);};
+
+ function showCompleted(span){
+    span.id = 'hide-completed';
+    span.innerHTML = 'visibility_off';
+    document.querySelector('.project-tasks.completed').classList.replace('hide', 'show');
+    span.removeEventListener('click', showCompletedEventHandler)
+    span.addEventListener('click', hideCompletedEventHandler)
+   }
+ 
+
+ function hideCompleted(span) {
+    span.id = 'show-completed';
+    span.innerHTML = 'visibility';
+    document.querySelector('.project-tasks.completed').classList.replace('show', 'hide');
+    span.removeEventListener('click', hideCompletedEventHandler)
+    span.addEventListener('click', showCompletedEventHandler)
+ }
+ 
+
 function navbarLinks() {
    inbox();
    today();
@@ -551,5 +572,5 @@ function buttons() {
 export {
     buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
     priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton, projectFilterButton,
-    eventHandler
+    eventHandler, showCompletedEventHandler, hideCompletedEventHandler
 }
