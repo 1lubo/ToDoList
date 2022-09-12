@@ -1,9 +1,9 @@
 import { addElement } from "./buildingblocks";
-import { createObject, allTasks, deleteObject, allProjects } from "./storage";
+import { allTasks, deleteObject, allProjects } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture, isInPast } from "./dateHelper";
-import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
-const {format, add, parseJSON} = require('date-fns');
-import { newTaskModal, showTaskModal } from "./modal";
+import { closeExpandedTaskButton, completeTask, uncompleteTask } from "./formsAndButtons";
+const {format, parseJSON} = require('date-fns');
+import { showTaskModal } from "./modal";
 import { setActive } from "./navbar";
 
 function buildTaskHeader(title, completed, description){
@@ -26,8 +26,7 @@ function buildTaskHeader(title, completed, description){
 }
 
 function buildExpandedTaskHeader(title, description){
-    let taskHeader = []
-    //taskHeader.classList.add('task-header');
+    let taskHeader = []    
     let taskTitle = addElement('input');
     taskTitle.setAttribute('type', 'text');
     taskTitle.value = title;
@@ -144,7 +143,7 @@ function buildTaskProjectDropdown(currentProject) {
             checkmark.classList.add('material-icons', 'md-18');
             projectName.appendChild(checkmark);
         }
-        //let projectName = addElement('div', project.title);
+        
         dropDownContent.appendChild(projectName);
     })
 
@@ -234,7 +233,7 @@ function showToday() {
     let tooltipText = addElement('span',  `${format(new Date(),'MMMM-do')}`);
     tooltipText.classList.add('tooltiptext');
     projectHeader.appendChild(tooltipText);
-    //projectHeader.appendChild(addElement('div', `(${format(new Date(),'MMM-do')})`));
+    
     
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');

@@ -2,7 +2,7 @@ import { addElement } from "./buildingblocks";
 import { newTaskForm, hideNewTaskFormButton, closeExpandedTaskButton, priorityDropDownButton, deleteTaskButton, projectDropdownButton, eventHandler } from "./formsAndButtons";
 import { allTasks } from "./storage";
 import { buildExpandedTask } from "./displayTask"
-import { add } from "date-fns";
+
 
 
 function newTaskModal(){

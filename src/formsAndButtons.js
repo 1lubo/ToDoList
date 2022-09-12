@@ -1,13 +1,15 @@
-import { Project,validateName, createProject } from "./project";
+import { validateName, createProject } from "./project";
 import { addProjectToNavbar, showProject, removeProjectFromNavbar } from "./displayProject";
 import { addElement, removeContent } from "./buildingblocks";
-import { showInbox, showToday, showUpcoming, addNewTaskToContainer, showTask, 
-buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer, buildTaskProjectDropdown } from "./displayTask";
+import { showToday, showUpcoming, addNewTaskToContainer,  
+ buildTaskPriorityDropdown, removeTaskContainer, buildTaskProjectDropdown } from "./displayTask";
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
 import { createNavBar } from "./navbar";
 
+
+/* build a form for adding a new task*/
 function newTaskForm(){
     let formElements = [];
     let modalContent = addElement('div');
@@ -27,16 +29,15 @@ function newTaskForm(){
     formElements.push(description);
     let dueDate = addElement('input');
     dueDate.setAttribute('type', 'date');
-    dueDate.id = 'task-dueDate';
-    //formElements.push(dueDate);
-    let priority = buildTaskPriorityDropdown();
+    dueDate.id = 'task-dueDate';    
+    let priority = buildTaskPriorityDropdown(); /* build the dropdown menu for selecting the task priority. Lowest priority selected by default */
     priority.id = 'task-priority'
     let dateAndPriority = addElement('div');
     dateAndPriority.classList.add('datepriority-container');
     let projectPriorityContainer = addElement('div');
     projectPriorityContainer.classList.add('project-priority')
     dateAndPriority.appendChild(dueDate);
-    projectPriorityContainer.appendChild(buildTaskProjectDropdown('Inbox'));
+    projectPriorityContainer.appendChild(buildTaskProjectDropdown('Inbox')); /* the dropdown menu for a new task will always show 'Inbox' as the default project */
     projectPriorityContainer.appendChild(priority)
     dateAndPriority.appendChild(projectPriorityContainer);    
     
@@ -57,6 +58,7 @@ function newTaskForm(){
 
 }
 
+/* add eventlisteners to all displayed tasks */
 function taskLinks(){
     Array.from(document.getElementsByClassName('task-details-container')).forEach( task => task.addEventListener('click', function (){                
         showTaskModal(task.id);
@@ -65,7 +67,7 @@ function taskLinks(){
 }
 
 
-
+/* add eventlisteners to all displayed task-complete checkboxes which are not checked*/
 function completeTaskButtons(){
     Array.from(document.querySelectorAll('input[type=checkbox]')).forEach( input => input.addEventListener('click', () => {
         let taskTitle = input.nextElementSibling.id;
@@ -80,6 +82,7 @@ function completeTaskButtons(){
     
 }
 
+/* add eventlisteners to all displayed task-complete checkboxes which are checked*/
 function uncompleteTask(taskTitle){
     
     let task = createObject(findObject(taskTitle, 'task'));
@@ -94,6 +97,7 @@ function uncompleteTask(taskTitle){
     
 }
 
+/* */
 function completeTask(taskTitle){
     
     let task = createObject(findObject(taskTitle, 'task'));
@@ -161,12 +165,7 @@ function getTaskPriority() {
 }
 
 function getProjectName() {
-    //let projectName = document.getElementsByClassName('project-title')[0];
-    //if (document.body.contains(projectName)) {
-    //    return projectName.innerText
-    //} else {
-    //    return 'Inbox';
-    //}
+    
     return document.getElementsByClassName('dropbtn-projects')[0].innerHTML;
 }
 
@@ -238,14 +237,7 @@ function closeExpandedTask(taskTitle) {
     taskCheckbox.classList.add(`priority-${getTaskPriority()}`);
     taskContainer.id = getTaskTitleFromForm();
     taskContainer.textContent = '';    
-    //if(previousProject == newTask.project){
-    //    buildTaskAfterEdit(newTask).forEach(e => taskContainer.appendChild(e))
-    //    hideNewTaskForm();
-    //} else {
-    //    removeContent();
-    //    showProject(newTask.project);
-    //    taskLinks();
-    //}
+    
     removeContent();
     showProject(newTask.project);
     taskLinks();
@@ -399,10 +391,7 @@ function deleteProjectButton(){
 function projectFilterButton(){
     document.getElementsByClassName('dropbtn-filter')[0].addEventListener('click', ()=> {
         showTasksFilterDropdown()
-        //document.getElementsByClassName('dropbtn-filter')[0].classList.add('open')
-        //if (document.body.contains(document.querySelector('.dropbtn-filter .open'))) {
-        //    cancelTaskFilterDropdownButton()
-        //}
+        
         
     })
 }

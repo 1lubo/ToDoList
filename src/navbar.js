@@ -1,8 +1,7 @@
 import { addElement } from './buildingblocks';
-import { addProjectToNavbar } from './displayProject';
 import { allProjects } from './storage';
 
-
+/* build floating button for adding new tasks*/
 function addTaskButton() {
     let addTaskButton = addElement('a', 'task');
     addTaskButton.classList.add('float', 'material-icons')
@@ -11,6 +10,7 @@ function addTaskButton() {
     
 }
 
+/* build navigation hamburger button to show on smaller screens*/ 
 function addNavHamburger() {
     let hamburger = addElement('a', 'menu_open');
     hamburger.classList.add('material-icons', 'hamburger-float', 'menu-hidden');
@@ -18,6 +18,8 @@ function addNavHamburger() {
     document.body.appendChild(hamburger);
 }
 
+
+/* create navigation bar */
 function createNavBar(){    
     let navBarContainer = addElement('div');
     navBarContainer.classList.add('navbar', 'hide-on-mobile');
@@ -26,10 +28,12 @@ function createNavBar(){
     navbarLinks.forEach( link => navBarContainer.appendChild(createNavLink(link[0], link[1])));    
     navBarContainer.appendChild(createProjectsSection());
     document.body.appendChild(navBarContainer);
-    addTaskButton();
-    addNavHamburger();
+    addTaskButton(); /* add new task button when creating navbar */ 
+    addNavHamburger(); /* add navigation hamburger button when creating navbar */ 
 }
 
+
+/* create a navbar navigation link container*/
 function createNavLink(text, icon){
     let navLinkContainer = addElement('div');
     let navIcon = addElement('span', icon);
@@ -42,6 +46,7 @@ function createNavLink(text, icon){
     return navLinkContainer;
 }
 
+/* create navbar section to show existing project names*/
 function createProjectsSection(){
     let projectsContainer = addElement('div');
     projectsContainer.classList.add('projects-container');
@@ -56,11 +61,13 @@ function createProjectsSection(){
     projectsContainer.appendChild(newProjectForm());
     let projectsList = addElement('div');
     projectsList.classList.add('projects-list');
-    existingProjectsNavLinks().forEach( e=> projectsList.appendChild(e));
+    existingProjectsNavLinks().forEach( e=> projectsList.appendChild(e)); /* crate list of navigation links for all existing projects */
     projectsContainer.appendChild(projectsList);
     
     return projectsContainer;
 }
+
+/* crate list of navigation links for all existing projects */
 
 function existingProjectsNavLinks() {
     let projectLinks = [];
@@ -79,7 +86,7 @@ function existingProjectsNavLinks() {
 }
 
 
-
+/* create form for adding a new project */
 function newProjectForm(){
     let formContainer = addElement('div');
     formContainer.classList.add('projects-form');
@@ -101,6 +108,7 @@ function newProjectForm(){
     return formContainer;
 }
 
+/* set the selected navigation bar item to active */
 function setActive(project) {
     
     let navbar = document.querySelector('.navbar');    
