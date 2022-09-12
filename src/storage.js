@@ -109,10 +109,8 @@ function checkStorageAvailable() {
                 allTasks.push(object);
             }
           
-        })
-
+        })       
         
-        //allTasks.sort((a, b) => a.title.localeCompare(b.title));
         allTasks.sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
         
         return allTasks

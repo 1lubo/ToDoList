@@ -6,7 +6,7 @@ buildTaskAfterEdit, buildTaskPriorityDropdown, removeTaskContainer, buildTaskPro
 import { validateTaskName, createTask } from "./task";
 import { newTaskModal, showTaskModal } from "./modal";
 import { createObject, saveObject, findObject, deleteObject, deleteProjectTasks } from "./storage";
-import { setActive } from "./navbar";
+import { createNavBar } from "./navbar";
 
 function newTaskForm(){
     let formElements = [];
@@ -33,11 +33,15 @@ function newTaskForm(){
     priority.id = 'task-priority'
     let dateAndPriority = addElement('div');
     dateAndPriority.classList.add('datepriority-container');
+    let projectPriorityContainer = addElement('div');
+    projectPriorityContainer.classList.add('project-priority')
     dateAndPriority.appendChild(dueDate);
-    dateAndPriority.appendChild(buildTaskProjectDropdown('Inbox'))
-    dateAndPriority.appendChild(priority);    
-    //formElements.push(priority);
+    projectPriorityContainer.appendChild(buildTaskProjectDropdown('Inbox'));
+    projectPriorityContainer.appendChild(priority)
+    dateAndPriority.appendChild(projectPriorityContainer);    
+    
     let formButtons = addElement('div');
+    formButtons.classList.add('modal-form-buttons');
     let submitFormButton = addElement('button', 'Add Task');
     submitFormButton.id = 'add-task';    
     let cancelFormButton = addElement('button', 'Cancel');    
@@ -361,8 +365,8 @@ function createNewProjectButton() {
 }
 
 function getNameFromForm() {
-    
-    return document.getElementById('name').value
+    let projectTitle =  document.getElementById('name').value;    
+    return projectTitle.replace(/\s+/g, "")
 
 }
 
@@ -412,11 +416,11 @@ function showTasksFilterDropdown(){
     taskProjectFilterButton() 
 }
 
-function closeTaskFilterDropDown(filterName){
+function closeTaskFilterDropDown(filterName){    
     document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('show', 'hide');
     document.getElementsByClassName('dropbtn-filter')[0].classList.remove('open')
-    let projectTitle = document.getElementsByClassName('project-title')[0].children[1].innerHTML;    
-    removeContent();    
+    let projectTitle = document.getElementsByClassName('project-title')[0].children[2].innerHTML;    
+    removeContent();     
     showProject(projectTitle, filterName)
       
     taskLinks();
@@ -424,22 +428,11 @@ function closeTaskFilterDropDown(filterName){
 }
 
 function taskProjectFilterButton() {
-    Array.from(document.querySelector('.filter-dropdown-content').childNodes).forEach( button => button.addEventListener('click', (e)=> {
-        
+    Array.from(document.querySelector('.filter-dropdown-content').childNodes).forEach( button => button.addEventListener('click', (e)=> {        
         closeTaskFilterDropDown(e.target.innerHTML);        
     }))
 }
 
-//function cancelTaskFilterDropdown(){
-//    document.getElementsByClassName('filter-dropdown-content')[0].classList.replace('show', 'hide');
-//    document.getElementsByClassName('dropbtn-filter')[0].classList.remove('open')
-//}
-//
-//function cancelTaskFilterDropdownButton(){
-//    document.getElementsByClassName('dropbtn-filter open')[0].addEventListener('click', ()=> {
-//        cancelTaskFilterDropdown()
-//    })
-//}
 
 function inbox() {
     document.getElementById('Inbox').parentElement.addEventListener('click', function(){
@@ -569,9 +562,20 @@ function buttons() {
     })
 }
 
+function start() {
+    saveObject(createProject('Inbox'));    
+    createTask('Welcome to ...', 'Inbox', null, 1, false, 'Forget-Me-Not');
+    createTask('Add a task ...', 'Inbox', null, 2, false, 'by clicking on the button in the lower right-hand corner');
+    createTask('Add a project ...', 'Inbox', null, 3, false, 'by clicking on the plus symbol on the navigation bar');
+    createNavBar();
+    showProject('Inbox','Priority');
+    taskLinks();
+    buttons();
+}
+
 
 export {
     buttons, closeExpandedTaskButton, closeExpandedTask, newTaskForm, hideNewTaskFormButton, createNewTaskButton, taskLinks, 
     priorityDropDownButton, completeTask, uncompleteTask, deleteTaskButton, deleteProjectButton, projectDropdownButton, projectFilterButton,
-    eventHandler, showCompletedEventHandler, hideCompletedEventHandler
+    eventHandler, showCompletedEventHandler, hideCompletedEventHandler, start
 }

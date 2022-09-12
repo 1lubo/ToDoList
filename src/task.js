@@ -5,7 +5,7 @@ function Task (title, project= 'Inbox', dueDate = null, priority = 4, completed 
     this.type = 'task';
     this.project = project;
     this.title = title;
-    this.dueDate = dueDate;
+    this.dueDate ||= new Date();
     this.priority = priority;
     this.completed = completed;
     this.description = description;

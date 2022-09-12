@@ -1,4 +1,4 @@
-const {addDays,format, differenceInCalendarDays, isSameYear, parseISO, isToday, isFuture, isPast} = require('date-fns');
+const {format, differenceInCalendarDays, isSameYear, parseISO, isToday, isFuture, isPast} = require('date-fns');
 
 let today = new Date();
 

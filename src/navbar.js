@@ -2,6 +2,7 @@ import { addElement } from './buildingblocks';
 import { addProjectToNavbar } from './displayProject';
 import { allProjects } from './storage';
 
+
 function addTaskButton() {
     let addTaskButton = addElement('a', 'task');
     addTaskButton.classList.add('float', 'material-icons')
@@ -84,27 +85,34 @@ function newProjectForm(){
     formContainer.classList.add('projects-form');
     let newFormNameInput = addElement('input');
     newFormNameInput.setAttribute('type', 'text');
-    newFormNameInput.setAttribute('placeholder', 'Project Name');
+    newFormNameInput.setAttribute('placeholder', 'New Project Name');
     newFormNameInput.id = 'name';
     let submitFormButton = addElement('button', 'Add Project');
     let cancelFormButton = addElement('button', 'Cancel');
     submitFormButton.id = 'add-project';
     cancelFormButton.id = 'cancel-form';
+    let projectFormButtons = addElement('div');
+    projectFormButtons.classList.add('projects-form-buttons');
     formContainer.appendChild(newFormNameInput);
-    formContainer.appendChild(submitFormButton);
-    formContainer.appendChild(cancelFormButton);
+    projectFormButtons.appendChild(submitFormButton);
+    projectFormButtons.appendChild(cancelFormButton);
+    formContainer.appendChild(projectFormButtons);
 
     return formContainer;
 }
 
 function setActive(project) {
-    let navbar = document.querySelector('.navbar');
-    if(navbar.contains(document.querySelector('.active'))) {
+    
+    let navbar = document.querySelector('.navbar');    
+
+    if(navbar.contains(document.querySelector('.active'))) {           
         navbar.querySelector('.active').classList.remove('active');
+        
     }    
     
     if(navbar.querySelector(`#${project}`).classList.contains('navbar-project')){
-        navbar.querySelector(`#${project}`).classList.add('active');    
+        navbar.querySelector(`#${project}`).classList.add('active'); 
+        
     } else {
         navbar.querySelector(`#${project}`).parentNode.classList.add('active');
     }

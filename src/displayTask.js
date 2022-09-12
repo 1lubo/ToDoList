@@ -2,7 +2,7 @@ import { addElement } from "./buildingblocks";
 import { createObject, allTasks, deleteObject, allProjects } from "./storage";
 import { displayDateFormat, dateIsToday, isInFuture, isInPast } from "./dateHelper";
 import { closeExpandedTaskButton, closeExpandedTask, closeExpandedTaskWindow, completeTask, uncompleteTask } from "./formsAndButtons";
-const {format, add, parseISO} = require('date-fns');
+const {format, add, parseJSON} = require('date-fns');
 import { newTaskModal, showTaskModal } from "./modal";
 import { setActive } from "./navbar";
 
@@ -67,7 +67,7 @@ function buildExpandedTaskFooter(dueDate, priority, project) {
     let dateProjectPriority = addElement('div');
     dateProjectPriority.classList.add('datepriority-container');    
     let taskDueDate = addElement('div');    
-    taskDueDate.innerText = format(parseISO(dueDate), 'y-MM-dd');
+    taskDueDate.innerText = format(parseJSON(dueDate), 'y-MM-dd');
     taskDueDate.id = 'task-dueDate';
     taskDueDate.classList.add('editable', 'duedate');
     let dateIcon = addElement('span', 'event');

@@ -5,7 +5,7 @@
 .material-icons.red { color: #fb000d; }
 .material-icons.green { color: #02b440; }
 .material-icons.yellow { color: #f7fb00; }
-.material-icons.gray { color: #5a5858; }
+.material-icons.gray { color: #858080; }
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
@@ -149,12 +149,76 @@ body {
 }
 
 .projects-form.show {
-    display: inline;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
 }
 
 .projects-form.hide {
     display: none;
 }
+
+.projects-form input {
+  background-color: #759ba4;
+  border: none;
+  padding: 0.8em;
+  margin-bottom: 0.5em;
+  border-radius: 7px;
+  color: white;
+  transition: padding 1s
+}
+
+.projects-form input[type=text]:focus {
+    background-color: #050505;
+    font-size: inherit;
+    padding: inherit;
+    border: none;
+}
+
+.projects-form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.projects-form button {  
+  cursor: pointer;  
+  border: none;
+  color: white;
+  padding: /*15px 32px*/ 0.6em 1.4em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.6em;
+  border-radius: 7px;
+  transition-duration: 0.4s;
+  font-weight: 500;
+}
+
+
+.projects-form button#add-project:hover {
+  background-color: #02b440;
+  color: white;
+ 
+}
+
+.projects-form button#cancel-form:hover  {
+  background-color: #c01a1a;
+  color: white;
+  
+}
+
+.projects-form button#add-project {
+  color: black;
+  background-color: #639d87;
+  border: 2px solid #02b440;
+}
+
+.projects-form button#cancel-form {
+  color: black;
+  background-color: #b17b7b;
+  border: 2px solid #c01a1a;
+}
+
 
 .priority-1 {
     border: 0.25em solid red;
@@ -327,6 +391,12 @@ input[type="checkbox"] {
     flex-direction: column;
   }
 
+  .modal-form-buttons{
+    display: flex;
+    justify-content: space-between;
+
+  }
+
   .modal-content input, .duedate {
     /*-webkit-appearance: none;
     appearance: none; */
@@ -407,6 +477,16 @@ input[type="checkbox"] {
   .project-priority {
     display: flex;
     justify-content: space-around;
+    padding-bottom: 0.5em;
+  }
+
+  .project-priority div {
+    border-radius: 7px;
+    padding: 0.1em 0.4em;
+  }
+
+  .project-priority div:hover {
+    background-color: #79ced7;
   }
       /* The Close Button */
   .close {

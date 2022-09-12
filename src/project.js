@@ -20,7 +20,7 @@ Project.prototype.getTasks = function () {
 }
 
 function validateName(projectTitle){    
-
+    
     if (projectTitle.length < 3) {
         return 'Project title must be at least 3 characters'
     } else if (existingProjectNames().includes(projectTitle)) {
@@ -31,6 +31,7 @@ function validateName(projectTitle){
 }
 
 function createProject(projectTitle){
+    
     let project = new Project(projectTitle);
     saveObject(project);
 

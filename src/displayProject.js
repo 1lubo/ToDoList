@@ -98,7 +98,7 @@ function removeProjectFromNavbar(projectTitle) {
     document.querySelector('.projects-list').children[projectTitle].remove()
 }
 
-function showProject(projectTitle, filterName=null, showCompletedTask=false){
+function showProject(projectTitle, filterName=null, showCompletedTask=false){    
     setActive(projectTitle);
     document.body.appendChild(addElement('div')).classList.add('content');
     const root = document.getElementsByClassName('content')[0];

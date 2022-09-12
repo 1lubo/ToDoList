@@ -36,6 +36,7 @@ function showTaskModal(taskTitle){
     deleteTask.classList.add('material-icons', 'md-36' ,'red');
     formHeader.appendChild(deleteTask);
     let formButtons = addElement('div');
+    formButtons.classList.add('modal-form-buttons')
     formButtons.appendChild(submitFormButton);
     formButtons.appendChild(cancelFormButton);    
     modalForm.appendChild(formButtons);    
