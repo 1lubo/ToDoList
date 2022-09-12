@@ -237,7 +237,7 @@ function showToday() {
     let tasksContainer = addElement('div');
     tasksContainer.classList.add('project-tasks');
     allTasks().forEach(function(task){
-        if(dateIsToday(task.dueDate)) {
+        if(dateIsToday(task.dueDate) && task.completed == false) {
             tasksContainer.appendChild(buildTask(task))
         }
     })
@@ -260,7 +260,7 @@ function showUpcoming() {
     projectHeader.classList.add('project-title');
     projectHeader.appendChild(addElement('h1', 'Upcoming'));
     allTasks().forEach(function(task){
-        if(isInFuture(task.dueDate)) {
+        if(isInFuture(task.dueDate) && task.completed == false) {
             tasksContainer.appendChild(buildTask(task))
         }
     })

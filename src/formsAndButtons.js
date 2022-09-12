@@ -512,8 +512,7 @@ function editDate(div){
     div.removeEventListener('click', eventHandler);
  }
 
- function finishEditDate(div){
-    //save data here
+ function finishEditDate(div){    
 
     let newDate = div.querySelector('input').value;
     div.innerText = newDate;
