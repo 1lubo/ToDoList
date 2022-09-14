@@ -121,8 +121,8 @@ function getTaskDescriptionFromForm() {
 }
 
 function getTaskDueDateFromForm() {
-    let dueDate = document.getElementById('task-dueDate').innerHTML;
-    dueDate ||= new Date();
+    let dueDate = document.getElementById('task-dueDate').innerHTML || document.getElementById('task-dueDate').value
+    dueDate = new Date(dueDate) || new Date();    
     return dueDate
 }
 
@@ -205,7 +205,7 @@ function hideNewTaskFormButton(){
 
 function createNewTaskButton() {    
     document.getElementById('add-task').addEventListener('click', function(){
-        if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {            
+        if(validateTaskName(getTaskTitleFromForm(), getProjectName() ) === true) {                
             let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), false, getTaskDescriptionFromForm());
             if(newTask.project == document.getElementsByClassName('project-title')[0].innerHTML){
                 addNewTaskToContainer(newTask);           
@@ -227,9 +227,9 @@ function closeExpandedTask(taskTitle) {
     let previousProject = createObject(findObject(taskTitle, 'task')).project
     localStorage.removeItem(taskTitle);    
     let taskContainer = document.getElementById(taskTitle)
-    let originalTaskComplete = taskContainer.children[0].children[0].classList.contains('completed');
+    let originalTaskComplete = taskContainer.children[0].children[0].classList.contains('completed');    
     let newTask = createTask(getTaskTitleFromForm(), getProjectName(), getTaskDueDateFromForm(), getTaskPriority(), originalTaskComplete, getTaskDescriptionFromForm());
-    saveObject(newTask);
+    saveObject(newTask);    
     let previousPriority = taskContainer.classList[1];
     let taskCheckbox = taskContainer.previousElementSibling;
     taskContainer.classList.remove(previousPriority);
