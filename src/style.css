@@ -477,6 +477,7 @@ input[type="checkbox"] {
   .project-priority {
     display: flex;
     justify-content: space-around;
+    align-items: center;
     padding-bottom: 0.5em;
   }
 
@@ -484,10 +485,7 @@ input[type="checkbox"] {
     border-radius: 7px;
     padding: 0.1em 0.4em;
   }
-
-  .project-priority div:hover {
-    background-color: #79ced7;
-  }
+ 
       /* The Close Button */
   .close {
     color: #aaaaaa;
@@ -550,8 +548,8 @@ input[type="checkbox"] {
     display: block;
   }
   
-  /* Change color of dropdown links on hover */
-  .dropdown-content div:hover, .projects-dropdown-content div:hover {background-color: #f1f1f1}
+  /* Change color of dropdown links on hover  */
+  .filter-dropdown-content.show div:hover, .dropdown-content.show div:hover, .projects-dropdown-content.show div:hover {background-color: rgba(87, 87, 87, 0.396)}
   
  
   
