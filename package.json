@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://1lubo.github.io/to-do-list/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b master -d build",
     "start": "webpack serve --open",
     "build": "webpack"
   },
@@ -21,6 +24,7 @@
     "webpack-dev-server": "^4.10.0"
   },
   "dependencies": {
-    "date-fns": "^2.29.2"
+    "date-fns": "^2.29.2",
+    "gh-pages": "^4.0.0"
   }
 }
